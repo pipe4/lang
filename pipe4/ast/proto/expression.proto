@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pipe4.lang.pipe4.ast;
+
+import "pipe4/ast/proto/operator.proto";
+
+message Expression {
+  Type type = 1;
+
+
+  enum Type {
+    UNKNOWN = 0;
+    CONSTANT = 11;
+    REFERENCE = 12;
+  }
+}
+
+message ExpressionReference {
+  string path = 1;
+}

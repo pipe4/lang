@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package pipe4.lang.pipe4.ast;
+
+import "pipe4/ast/proto/import.proto";
+
+message File {
+  string name = 1;
+  string extension = 2;
+
+
+  repeated Import imports = 10;
+}
