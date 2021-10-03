@@ -1,6 +1,227 @@
 
 
-nil type nil
 
-type unit block
 
+
+/*
+	Type patterns:
+	* primitive     42
+	* alias         go-git.CloneOptions
+	* struct        {x string}
+	* slice         []string
+	* tuple         string,error
+	* func          (struct) struct
+
+	Declaration patterns:
+
+	shortVarDeclaration:
+
+
+
+
+// query надо выполнить
+select a.*, b.*, c.*
+from a.ab as b
+b.bc as c
+c.cd as d
+where b.name == 'bar' and c.name like '%foo%';
+
+bar
+foor
+
+a.ab 0x8ab76
+b.bc
+
+0x8ab76 -> [0xcccc,....]
+
+read(0x8ab76, 100)
+read(0xccccc, 100)
+read(0xbbbbbb, 100)
+
+
+
+
+
+branch {
+	address int
+	tree_id int  // btree index
+
+	name string
+
+	len   int
+	color string
+	sub []branch
+}
+
+
+
+type tree = branch
+type forest = []tree
+
+
+
+man {
+	int   index
+
+	left  man
+	right man
+}
+
+
+
+
+
+	Instantiation patterns:
+	signature: patternType newTypeName type
+		type A string
+		const X 10
+
+
+	alias:
+		patternTypeFamily newTypeName patternType type
+	full:
+		type A struct {
+			a string
+			b int
+		}
+	p:
+		unit ({a string}) {
+			b :=
+		}
+
+
+*/
+
+// type
+
+
+/*
+
+type Field struct {
+	name string
+	type type
+}
+
+type message struct {
+	fields []Field
+}
+
+//
+// type Person message {
+//   FirstName string
+// }
+//
+// type SnakePerson message {
+// 	 first_name string
+// }
+//
+
+unit SendProtoFromJava () {
+	person := go-module.GenNewUser()
+
+	SnakePerson := ToSnakeCaseMessage(person)
+
+	snakePerson := SnakePerson({
+		first_name: person.FirstName
+	})
+
+	json-sender.Send(snakePerson)
+}
+
+VladD2, WolfHound,
+Nemerle - язык, построенный для метапрограммирования
+http://nemerle.org/About
+https://github.com/rsdn/nemerle/wiki/MacroUse
+
+http://xmlns.com/foaf/spec/20091215.html#term_givenName
+
+
+// https://rushan-shop.ru/my_tovar.rdfs
+prefix <https://yandex.ru/vacabilary> yandex
+
+property hasResolution owl:equavalentProperty yandex:resolution
+myCoolTv tv:hasResolution 56
+myCoolTv factory:madeIn Japan
+
+// standard country ontology
+property isPartOf
+Japan isPartOf Asia
+property isPart of owl:
+
+// factories
+https://factory-vacabulary/madeIn
+
+
+// yandex market
+hasResolution > 58 and madeIn Asia owl:equavelentClass SamsungTv
+
+owl reasoner - логический вывод. Pellet, Fact++, Xerox,
+
+myCoolTv tv:hasResolution 56 -> myCoolTv yandex:resolution 56
+a partOf b, b partOf c -> a partOf c
+a partOf a
+
+partOf is rdfs:TransitiveProperty
+a maidIn b, b partOf c -> a maidIn c
+a maidIn Russia
+a maidIn b, a maidIn c -> b partOf c or c partOf b
+
+
+a locatedIn Russia
+a locatedIn Japan
+
+
+a visited Russia
+a visited Japan
+
+
+
+a propertRealtio b, b isParOf c owl:equavelentClass a madeIn c
+madeIn subproperty PropertyRelation
+myCoolTv factory:madeIn Japan -> myCoolTv factory:madeIn Asia
+
+myCoolTv madeBy Samsung
+
+func ToSnakeCaseMessage (m message) type {
+	mType := typeof(m)
+
+	out := message({})
+	for ()
+	return mType;
+}
+
+
+
+
+type Person message {
+	name string
+}
+
+v := Person({name: "вася"})
+
+instance type typeFamily
+Person message struct
+message struct type
+
+Person := message({name string})
+
+ast Person {
+  type: message{name string},
+  name: "Person",
+}
+Person2 = ToUpperTYpe(Person)
+ast Person2 {
+  type: message{Name string},
+  name: "Person2",
+}
+
+func ToUpperType (m message) {
+	outType = message({})
+    for (key in m.type) {
+        outType[TyUpperFirstLetter(key)] = m.type[key]
+    }
+    return outType
+}
+
+
+*/
