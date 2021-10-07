@@ -1,0 +1,66 @@
+//syntax = "proto3";
+//
+//package pipe4.lang.pipe4.ast;
+//
+//import "google/protobuf/type.proto";
+//
+//message Constant {
+//  Type type = 1;
+//
+//  oneof value {
+//    ConstantPrimitive value_primitive = 11;
+//    ConstantStruct value_struct = 12;
+//    ConstantTuple value_tuple = 13;
+//    ConstantArray value_array = 14;
+//  };
+//
+//  enum Type {
+//    UNKNOWN = 0;
+//    PRIMITIVE = 11;
+//    STRUCT = 12;
+//    TUPLE = 13;
+//    ARRAY = 14;
+//  }
+//}
+//
+//message ConstantPrimitive {
+//  Type type = 1;
+//
+//  oneof value {
+//    int64 value_int64 = 11;
+//    double value_double = 12;
+//    string value_string = 13;
+//    bool value_bool = 14;
+//    ConstantNil value_nil = 15;
+//  }
+//
+//  enum Type {
+//    UNKNOWN = 0;
+//    INT64 = 11;
+//    DOUBLE = 12;
+//    STRING = 13;
+//    BOOL = 14;
+//    NIL = 15;
+//  }
+//}
+//
+//message ConstantNil {
+//
+//}
+//
+//message ConstantStruct {
+//  repeated Field fields = 1;
+//
+//  message Field {
+//    string name = 1;
+//    Constant value = 2;
+//  }
+//}
+//
+//message ConstantTuple {
+//  repeated Constant items = 1;
+//}
+//
+//message ConstantArray {
+//  repeated Constant items = 1;
+//}

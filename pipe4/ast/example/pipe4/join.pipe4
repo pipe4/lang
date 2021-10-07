@@ -1,16 +1,18 @@
 
+struct message
 
-
-type Person interface {
+message Person {
 	id	 string
 	name string
 	age  int
 }
-type ChangeName interface {
+
+message ChangeName {
 	id   string
 	name string
 }
-type ChangeAge interface {
+
+message ChangeAge {
 	id 	string
 	age int
 }
