@@ -8,7 +8,7 @@ import (
 
 func TestParseFile(t *testing.T) {
 	file, err := ParseFile("./examples/import.pipe4")
-	require.Nilf(t, err, "should parse import.pipe4 file")
+	require.NoErrorf(t, err, "should parse import.pipe4 file")
 	assert.ElementsMatchf(t, []Import{
 		{Name: "pipe4", Path: `"github.com/pipe4/lang/pipe4"`},
 		{Path: `"github.com/stretchr/testify/require"`},
