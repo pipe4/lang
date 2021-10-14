@@ -1,0 +1,11 @@
+
+type URL string
+
+unit BuildProto({
+    url URL
+}) {
+    bob := Bob
+    alex := Student {
+       Name "Alex"
+    }
+}

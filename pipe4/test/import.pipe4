@@ -1,6 +1,9 @@
 
+import "github.com/pipe4/lang/pipe4"
+
+import local-rename "github.com/pipe4/lang/asd"
+
 import (
 	pipe4 "github.com/pipe4/lang/pipe4"
     "github.com/stretchr/testify/require"
 )
-

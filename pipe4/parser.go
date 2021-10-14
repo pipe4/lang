@@ -2,39 +2,41 @@ package pipe4
 
 import (
 	"fmt"
-	"github.com/alecthomas/participle/v2"
-	"github.com/kr/pretty"
+	"log"
 	"os"
+
+	"github.com/alecthomas/participle/v2"
 )
 
+var parser = participle.MustBuild(
+	&File{},
+	participle.Lexer(pipe4Lexer),
+	participle.Elide("Comment", "Whitespace"),
+	participle.UseLookahead(2),
+)
 
-func ParseFile(sourcePath string) (*File, error) {
-	fileAst := &File{}
-
-	parser, err := participle.Build(
-		&File{},
-		participle.Lexer(pipe4Lexer),
-		participle.Elide("Comment", "Whitespace"),
-		participle.UseLookahead(2),
-	)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed build pipe4 parser: %w", err)
+func ParseString(source string) (*File, error) {
+	file := &File{}
+	if err := parser.ParseString("", source, file); err != nil {
+		return nil, fmt.Errorf("failed parse pipe4 source: %w", err)
 	}
+	return file, nil
+}
 
-	fmt.Printf("EBNF:\n\n%v\n\n\n", parser.String())
-
-	sourceReader, err := os.Open(sourcePath)
+func ParseFile(path string) (*File, error) {
+	ast := &File{}
+	file, err := os.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open file %v: %w", sourcePath, err)
+		return nil, fmt.Errorf("failed open file %v: %w", path, err)
 	}
-	err = parser.Parse(sourcePath, sourceReader, fileAst)
-	_ = sourceReader.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Printf("failed to close file %v: %+v", path, err)
+		}
+	}()
 
-	fmt.Printf("%v AST:\n\n%# v\n\n\n", sourcePath, pretty.Formatter(fileAst))
-
-	if err != nil {
-		return nil, fmt.Errorf("failed parse %v: %w", sourcePath, err)
+	if err := parser.Parse(path, file, ast); err != nil {
+		return nil, fmt.Errorf("failed parse pipe4 source: %w", err)
 	}
-	return fileAst, nil
+	return ast, nil
 }
