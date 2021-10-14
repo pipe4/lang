@@ -40,3 +40,7 @@ func ParseFile(path string) (*File, error) {
 	}
 	return ast, nil
 }
+
+func GetBnf() string {
+	return parser.String()
+}
