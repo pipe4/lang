@@ -34,6 +34,7 @@ type RootStatement struct {
 	Name string `parser:"( @Ident" yaml:"Name,omitempty"`
 
 	String *string `parser:"( (@String" yaml:"String,omitempty"`
+	Bool   *Bool   `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
 	Number *Rat    `parser:"| @Rat)" yaml:"Number,omitempty"`
 
 	Type   string            `parser:"| ( @Ident?" yaml:"Type,omitempty"`
@@ -50,6 +51,7 @@ type StructStatement struct {
 	Name    string   `parser:"( @Ident" yaml:"Name,omitempty"`
 
 	String *string `parser:"( ( (@String" yaml:"String,omitempty"`
+	Bool   *Bool   `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
 	Number *Rat    `parser:"| @Rat)" yaml:"Number,omitempty"`
 
 	Type   string            `parser:"| ( @Ident" yaml:"Type,omitempty"`
@@ -66,6 +68,7 @@ type StructStatement struct {
 type PropsStatement struct {
 	Type   string            `parser:"( @Ident" yaml:"Type,omitempty"`
 	String *string           `parser:"| @String" yaml:"String,omitempty"`
+	Bool   *Bool             `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
 	Number *Rat              `parser:"| @Rat" yaml:"Number,omitempty"`
 	Struct []StructStatement `parser:"| '{' @@* '}' )" yaml:"Struct,omitempty"`
 
@@ -75,6 +78,7 @@ type PropsStatement struct {
 }
 type DefaultStatement struct {
 	String *string `parser:"( (@String" yaml:"String,omitempty"`
+	Bool   *Bool   `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
 	Number *Rat    `parser:"| @Rat)" yaml:"Number,omitempty"`
 
 	Type   string            `parser:"| ( @Ident?" yaml:"Type,omitempty"`
@@ -135,6 +139,23 @@ func (c *Comment) GetTag(name string) string {
 		return ""
 	}
 	return c.Tags[name]
+}
+
+type Bool bool
+
+func (b *Bool) Capture(values []string) error {
+	if len(values) != 1 {
+		return fmt.Errorf("to parse bool i need exactly one string but got: '%+v'", values)
+	}
+	switch values[0] {
+	case `true`:
+		*b = true
+	case `false`:
+		*b = false
+	default:
+		return fmt.Errorf("failed parse bool from: '%+v'", values[0])
+	}
+	return nil
 }
 
 type Rat struct {

@@ -1,0 +1,21 @@
+
+
+bob true
+not false
+
+Person {
+	Missing = true
+}
+
+/*/lang:yaml test:ast/
+Statements:
+- Name: bob
+  Bool: true
+- Name: not
+  Bool: false
+- Name: Person
+  Struct:
+  - Name: Missing
+    Default:
+      Bool: true
+*/
