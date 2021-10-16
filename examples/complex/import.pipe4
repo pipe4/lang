@@ -1,0 +1,20 @@
+
+import "github.com/pipe4/lang"
+
+import local-rename "github.com/pipe4/lang/asd"
+
+import (
+	pipe4 "github.com/pipe4/lang"
+    "github.com/stretchr/testify/require"
+)
+
+
+/*/lang:yaml test:ast/
+Import:
+  - Url: github.com/pipe4/lang
+  - Name: local-rename
+    Url: github.com/pipe4/lang/asd
+  - Name: pipe4
+    Url: github.com/pipe4/lang
+  - Url: github.com/stretchr/testify/require
+*/

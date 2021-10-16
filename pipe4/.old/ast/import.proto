@@ -1,9 +1,0 @@
-syntax = "proto3";
-package pipe4.ast;
-option go_package = "github.com/pipe4/lang/pipe4/ast";
-
-
-message Import {
-  string url = 1;
-  string local_name = 2;
-}

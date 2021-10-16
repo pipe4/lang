@@ -1,0 +1,67 @@
+syntax = "proto3";
+package pipe4.ast;
+option go_package = "github.com/pipe4/lang/ast";
+
+
+message Type {
+  string path = 1;
+  Type base_type = 2;
+  Type constructor = 3;
+
+  oneof instance {
+    Primitive primitive = 11;
+//    Alias alias = 12;
+    Struct struct = 13;
+    Slice slice = 14;
+    //    Tuple tuple = 15;
+    Func func = 16;
+  };
+
+  //  repeated Scope scope = 2;
+}
+//
+//message Scope {
+//  string path = 1;
+//}
+
+message Primitive {
+  oneof value {
+    int64 value_int64 = 11;
+    double value_double = 12;
+    string value_string = 13;
+    bool value_bool = 14;
+    Nil value_nil = 15;
+  }
+}
+
+message Nil {
+
+}
+
+//message Alias {
+//  string path = 1;
+//}
+
+message Struct {
+  repeated Field fields = 1;
+
+  message Field {
+    string name = 1;
+    Type type = 2;
+    string comment = 3;
+  }
+}
+
+message Slice {
+  Type type = 1;
+}
+
+//message Tuple {
+//  repeated Type types = 1;
+//}
+
+message Func {
+  Struct props = 1;
+  Struct body = 2;
+  //  Tuple return = 3;
+}

@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/lang.iml" filepath="$PROJECT_DIR$/.idea/lang.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pipe4/.old/ast/proto/proto.iml" filepath="$PROJECT_DIR$/pipe4/.old/ast/proto/proto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.old/ast/proto/proto.iml" filepath="$PROJECT_DIR$/.old/ast/proto/proto.iml" />
     </modules>
   </component>
 </project>
