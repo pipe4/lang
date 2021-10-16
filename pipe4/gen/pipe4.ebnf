@@ -1,0 +1,6 @@
+File = ("import" (Import | ("(" Import* ")")))* RootStatement* .
+Import = <ident>? <string> .
+RootStatement = ((<linecomment> | <blockcomment>)? (<ident> ((<string> | <rat>) | (<ident>? ("(" (PropsStatement ("," PropsStatement)*)? ")")? ("{" StructStatement* "}")?)))?)! .
+PropsStatement = (<ident> | <string> | <rat> | ("{" StructStatement* "}")) .
+StructStatement = ((<linecomment> | <blockcomment>)? (<ident> (((<string> | <rat>) | (<ident> ("(" (PropsStatement ("," PropsStatement)*)? ")")? ("{" StructStatement* "}")?))? ("=" DefaultStatement)?)!)?)! .
+DefaultStatement = ((<string> | <rat>) | (<ident>? ("(" (PropsStatement ("," PropsStatement)*)? ")")? ("{" StructStatement* "}")?)) .

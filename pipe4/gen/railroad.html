@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<style>
+body {
+	background-color: hsl(30,20%, 95%);
+}
+h1 {
+	font-family: sans-serif;
+	font-size: 1em;
+}
+</style>
+<!-- From https://github.com/tabatkins/railroad-diagrams -->
+<link rel='stylesheet' href='railroad-diagrams.css'>
+<script src='railroad-diagrams.js'></script>
+<body>
+<h1 id="File">File</h1>
+<script>
+Diagram(Choice(0, Sequence(ZeroOrMore(Choice(0, Sequence(Terminal("import"), Choice(0, Sequence(NonTerminal("Import", {href:"#Import"})), Sequence(Choice(0, Sequence(Terminal("("), ZeroOrMore(NonTerminal("Import", {href:"#Import"})), Terminal(")")))))))), ZeroOrMore(NonTerminal("RootStatement", {href:"#RootStatement"}))))).addTo();
+</script>
+
+<h1 id="Import">Import</h1>
+<script>
+Diagram(Choice(0, Sequence(Optional(NonTerminal("ident")), NonTerminal("string")))).addTo();
+</script>
+
+<h1 id="RootStatement">RootStatement</h1>
+<script>
+Diagram(Choice(0, Sequence(Choice(0, Sequence(Optional(Choice(0, Sequence(NonTerminal("linecomment")), Sequence(NonTerminal("blockcomment")))), Optional(Choice(0, Sequence(NonTerminal("ident"), Choice(0, Sequence(Choice(0, Sequence(NonTerminal("string")), Sequence(NonTerminal("rat")))), Sequence(Choice(0, Sequence(Optional(NonTerminal("ident")), Optional(Choice(0, Sequence(Terminal("("), Optional(Choice(0, Sequence(NonTerminal("PropsStatement", {href:"#PropsStatement"}), ZeroOrMore(Choice(0, Sequence(Terminal(","), NonTerminal("PropsStatement", {href:"#PropsStatement"}))))))), Terminal(")")))), Optional(Choice(0, Sequence(Terminal("{"), ZeroOrMore(NonTerminal("StructStatement", {href:"#StructStatement"})), Terminal("}"))))))))))))))))).addTo();
+</script>
+
+<h1 id="PropsStatement">PropsStatement</h1>
+<script>
+Diagram(Choice(0, Sequence(Choice(0, Sequence(NonTerminal("ident")), Sequence(NonTerminal("string")), Sequence(NonTerminal("rat")), Sequence(Choice(0, Sequence(Terminal("{"), ZeroOrMore(NonTerminal("StructStatement", {href:"#StructStatement"})), Terminal("}")))))))).addTo();
+</script>
+
+<h1 id="StructStatement">StructStatement</h1>
+<script>
+Diagram(Choice(0, Sequence(Choice(0, Sequence(Optional(Choice(0, Sequence(NonTerminal("linecomment")), Sequence(NonTerminal("blockcomment")))), Optional(Choice(0, Sequence(NonTerminal("ident"), Choice(0, Sequence(Optional(Choice(0, Sequence(Choice(0, Sequence(NonTerminal("string")), Sequence(NonTerminal("rat")))), Sequence(Choice(0, Sequence(NonTerminal("ident"), Optional(Choice(0, Sequence(Terminal("("), Optional(Choice(0, Sequence(NonTerminal("PropsStatement", {href:"#PropsStatement"}), ZeroOrMore(Choice(0, Sequence(Terminal(","), NonTerminal("PropsStatement", {href:"#PropsStatement"}))))))), Terminal(")")))), Optional(Choice(0, Sequence(Terminal("{"), ZeroOrMore(NonTerminal("StructStatement", {href:"#StructStatement"})), Terminal("}"))))))))), Optional(Choice(0, Sequence(Terminal("="), NonTerminal("DefaultStatement", {href:"#DefaultStatement"})))))))))))))))).addTo();
+</script>
+
+<h1 id="DefaultStatement">DefaultStatement</h1>
+<script>
+Diagram(Choice(0, Sequence(Choice(0, Sequence(Choice(0, Sequence(NonTerminal("string")), Sequence(NonTerminal("rat")))), Sequence(Choice(0, Sequence(Optional(NonTerminal("ident")), Optional(Choice(0, Sequence(Terminal("("), Optional(Choice(0, Sequence(NonTerminal("PropsStatement", {href:"#PropsStatement"}), ZeroOrMore(Choice(0, Sequence(Terminal(","), NonTerminal("PropsStatement", {href:"#PropsStatement"}))))))), Terminal(")")))), Optional(Choice(0, Sequence(Terminal("{"), ZeroOrMore(NonTerminal("StructStatement", {href:"#StructStatement"})), Terminal("}"))))))))))).addTo();
+</script>
+
+</body>
