@@ -58,26 +58,26 @@ Statements:
 - Name: Person
   Struct:
   - Name: FirstName
-	Type: string
+    Type: string
   - Name: LastName
-	Type: string
+    Type: string
 - Name: FullName
   Type: unit
   Props:
   - Struct:
-	- Name: person
-	  Type: Person
-	  Default:
-		Struct:
-		- Name: FirstName
-		  String: unknown
-		- Name: LastName
-		  String: unknown
+    - Name: person
+      Type: Person
+      Default:
+        Struct:
+        - Name: FirstName
+          String: unknown
+        - Name: LastName
+          String: unknown
   Struct:
   - Name: fullName
-	Type: strings.Join
-	Props:
-	- String: ' '
-	- Type: person.FirstName
-	- Type: person.LastName
+    Type: strings.Join
+    Props:
+    - String: ' '
+    - Type: person.FirstName
+    - Type: person.LastName
 */
