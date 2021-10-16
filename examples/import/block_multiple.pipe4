@@ -1,7 +1,7 @@
 
 import (
-    "github.com/pipe4/lang"
-    "google.com"
+	"github.com/pipe4/lang"
+	"google.com"
 )
 
 /*/lang:yaml test:ast/

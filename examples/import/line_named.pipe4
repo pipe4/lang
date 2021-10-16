@@ -4,5 +4,5 @@ import pipe4-rename "github.com/pipe4/lang"
 /*/lang:yaml test:ast/
 Import:
   - Url: github.com/pipe4/lang
-    Name: pipe4-rename
+	Name: pipe4-rename
 */

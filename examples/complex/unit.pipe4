@@ -5,38 +5,38 @@ import local-rename "github.com/pipe4/lang/asd"
 
 import (
 	pipe4 "github.com/pipe4/lang"
-    "github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"
 )
 
 URL string
 
 BuildProto unit({
-    url URL
+	url URL
 }) {
-    ctx Context {
-        sql db.Sql = default.db.Sql
-    }
+	ctx Context {
+		sql db.Sql = default.db.Sql
+	}
 
-    bob Bob
-    alex Student {
-       Name "Alex"
-    }
+	bob Bob
+	alex Student {
+	   Name "Alex"
+	}
 }
 
 BuildGit unit() {
 
 }
 Person {
-    FirstName string
-    LastName string
+	FirstName string
+	LastName string
 }
 FullName unit({
-    person Person = {
-        FirstName "unknown"
-        LastName "unknown"
-    }
+	person Person = {
+		FirstName "unknown"
+		LastName "unknown"
+	}
 }) {
-    fullName strings.Join(" ", person.FirstName, person.LastName)
+	fullName strings.Join(" ", person.FirstName, person.LastName)
 }
 
 /*/lang:yaml test:ast/
@@ -58,26 +58,26 @@ Statements:
 - Name: Person
   Struct:
   - Name: FirstName
-    Type: string
+	Type: string
   - Name: LastName
-    Type: string
+	Type: string
 - Name: FullName
   Type: unit
   Props:
   - Struct:
-    - Name: person
-      Type: Person
-      Default:
-        Struct:
-        - Name: FirstName
-          String: unknown
-        - Name: LastName
-          String: unknown
+	- Name: person
+	  Type: Person
+	  Default:
+		Struct:
+		- Name: FirstName
+		  String: unknown
+		- Name: LastName
+		  String: unknown
   Struct:
   - Name: fullName
-    Type: strings.Join
-    Props:
-    - String: ' '
-    - Type: person.FirstName
-    - Type: person.LastName
+	Type: strings.Join
+	Props:
+	- String: ' '
+	- Type: person.FirstName
+	- Type: person.LastName
 */

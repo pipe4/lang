@@ -1,42 +1,42 @@
 
 
 Person struct {
-    Name string
-    Iq float64
-    Age int64
+	Name string
+	Iq float64
+	Age int64
 }
 
 Student Person
 
 Bob Student {
-    Name "Bob"
-    Age 10
-    Iq 13.4
-    Progress 1/3
+	Name "Bob"
+	Age 10
+	Iq 13.4
+	Progress 1/3
 }
 
 /*/lang:yaml test:ast/
 Statements:
   - Name: Person
-    Type: struct
-    Struct:
-      - Name: Name
-        Type: string
-      - Name: Iq
-        Type: float64
-      - Name: Age
-        Type: int64
+	Type: struct
+	Struct:
+	  - Name: Name
+		Type: string
+	  - Name: Iq
+		Type: float64
+	  - Name: Age
+		Type: int64
   - Name: Student
-    Type: Person
+	Type: Person
   - Name: Bob
-    Type: Student
-    Struct:
-      - Name: Name
-        String: Bob
-      - Name: Age
-        Number: "10"
-      - Name: Iq
-        Number: 67/5
-      - Name: Progress
-        Number: 1/3
+	Type: Student
+	Struct:
+	  - Name: Name
+		String: Bob
+	  - Name: Age
+		Number: "10"
+	  - Name: Iq
+		Number: 67/5
+	  - Name: Progress
+		Number: 1/3
 */
