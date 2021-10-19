@@ -41,6 +41,11 @@ func testParseFile(t *testing.T, path string) (ast *File) {
 		if err != nil {
 			assert.NoError(t, err, "error while parsing file")
 		}
+		got.Walk(func(s StatementWithContext) {
+			s.Pos = lexer.Position{}
+			s.EndPos = lexer.Position{}
+			// s.Tokens = nil
+		})
 		ast = got
 		t.Logf("file:\n%# v", pretty.Formatter(got))
 	})
@@ -100,10 +105,8 @@ func testAst(t *testing.T, path string) {
 		}
 
 		wantYaml := ""
+
 		for i, s := range got.Statements {
-			got.Statements[i].Pos = lexer.Position{}
-			got.Statements[i].EndPos = lexer.Position{}
-			got.Statements[i].Tokens = nil
 			if s.Comment.GetTag("lang") != "yaml" {
 				continue
 			}
@@ -112,7 +115,7 @@ func testAst(t *testing.T, path string) {
 			}
 			wantYaml = got.Statements[i].Comment.Text
 			got.Statements[i].Comment = nil
-			if reflect.DeepEqual(got.Statements[i], RootStatement{}) {
+			if reflect.DeepEqual(got.Statements[i], Statement{}) {
 				got.Statements = append(got.Statements[:i], got.Statements[i+1:]...)
 			}
 		}

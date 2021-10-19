@@ -11,12 +11,46 @@ import (
 )
 
 type File struct {
-	Import     []Import        `parser:"('import' (@@ | '(' @@* ')'))*" yaml:"Import,omitempty"`
-	Statements []RootStatement `parser:"@@*" yaml:"Statements,omitempty"`
+	Statements []Statement `parser:"@@*" yaml:"Statements,omitempty"`
 
 	Pos    lexer.Position `parser:"" yaml:"-"`
 	EndPos lexer.Position `parser:"" yaml:"-"`
-	Tokens []lexer.Token  `parser:"" yaml:"-"`
+	// Tokens []lexer.Token `parser:"" yaml:"-"`
+}
+
+type Statement struct {
+	// Imports               1  2         3                -3 -2  -1'
+	Import []Import `parser:"(  ('import' (@@ | '(' @@* ')' )  )+  )" yaml:"Import,omitempty"`
+
+	// Comment                  1  2'                        -2'
+	Comment *Comment `parser:"| ( @(LineComment | BlockComment)?"  yaml:"Comment,omitempty"`
+
+	// Definition        2' 2
+	Name string `parser:"(  ( @Ident?" yaml:"Name,omitempty"`
+
+	// Constant             3 4
+	String *string `parser:"( (@String" yaml:"String,omitempty"`
+	//                     5               -5
+	Bool *Bool `parser:"| @Bool" yaml:"Bool,omitempty"`
+	//                        -4
+	Number *Rat `parser:"| @Rat)" yaml:"Number,omitempty"`
+
+	// Type                4
+	Type string `parser:"| ( @Ident?" yaml:"Type,omitempty"`
+	//                          5     6   7     -7 -6     -5
+	Props *[]Statement `parser:"( '(' (@@ (',' @@) *)? ')' )?" yaml:"Props,omitempty"`
+	// //                                 5            -5  -4 -3 -2  -1
+	// Struct *[]StructStatement `parser:"( '{' @@* '}' )?  )  )  )?  )!" yaml:"Struct,omitempty"`
+
+	//                           5            -5  -4 -3
+	Struct *[]Statement `parser:"( '{' @@* '}' )?  )! )?" yaml:"Struct,omitempty"`
+
+	// Defaults                 3       -3  -2 -2' -1
+	Default *Statement `parser:"( '=' @@ )?  )! )?  )!" yaml:"Default,omitempty"`
+
+	Pos    lexer.Position `parser:"" yaml:"-"`
+	EndPos lexer.Position `parser:"" yaml:"-"`
+	// Tokens []lexer.Token `parser:"" yaml:"-"`
 }
 
 type Import struct {
@@ -28,66 +62,29 @@ type Import struct {
 	Tokens []lexer.Token  `parser:"" yaml:"-"`
 }
 
-type RootStatement struct {
-	Comment *Comment `parser:"( @(LineComment | BlockComment)?"  yaml:"Comment,omitempty"`
-
-	Name string `parser:"( @Ident" yaml:"Name,omitempty"`
-
-	String *string `parser:"( (@String" yaml:"String,omitempty"`
-	Bool   *Bool   `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
-	Number *Rat    `parser:"| @Rat)" yaml:"Number,omitempty"`
-
-	Type   string            `parser:"| ( @Ident?" yaml:"Type,omitempty"`
-	Props  []PropsStatement  `parser:"( '(' (@@ (',' @@)*)? ')' )?" yaml:"Props,omitempty"`
-	Struct []StructStatement `parser:"( '{' @@* '}' )?  )  ) )?  )!" yaml:"Struct,omitempty"`
-
-	Pos    lexer.Position `parser:"" yaml:"-"`
-	EndPos lexer.Position `parser:"" yaml:"-"`
-	Tokens []lexer.Token  `parser:"" yaml:"-"`
+func (s *Statement) HasProps() bool {
+	return s != nil && s.Props != nil
 }
-
-type StructStatement struct {
-	Comment *Comment `parser:"( @(LineComment | BlockComment)?" yaml:"Comment,omitempty"`
-	Name    string   `parser:"( @Ident" yaml:"Name,omitempty"`
-
-	String *string `parser:"( ( (@String" yaml:"String,omitempty"`
-	Bool   *Bool   `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
-	Number *Rat    `parser:"| @Rat)" yaml:"Number,omitempty"`
-
-	Type   string            `parser:"| ( @Ident" yaml:"Type,omitempty"`
-	Props  []PropsStatement  `parser:"( '(' (@@ (',' @@)*)? ')' )?" yaml:"Props,omitempty"`
-	Struct []StructStatement `parser:"( '{' @@* '}' )? ) )?" yaml:"Struct,omitempty"`
-
-	Default *DefaultStatement `parser:"( '=' @@ )?  )! )?  )!" yaml:"Default,omitempty"`
-
-	Pos    lexer.Position `parser:"" yaml:"-"`
-	EndPos lexer.Position `parser:"" yaml:"-"`
-	Tokens []lexer.Token  `parser:"" yaml:"-"`
+func (s *Statement) GetProps() []Statement {
+	if !s.HasProps() {
+		return nil
+	}
+	return *s.Props
 }
-
-type PropsStatement struct {
-	Type   string            `parser:"( @Ident" yaml:"Type,omitempty"`
-	String *string           `parser:"| @String" yaml:"String,omitempty"`
-	Bool   *Bool             `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
-	Number *Rat              `parser:"| @Rat" yaml:"Number,omitempty"`
-	Struct []StructStatement `parser:"| '{' @@* '}' )" yaml:"Struct,omitempty"`
-
-	Pos    lexer.Position `parser:"" yaml:"-"`
-	EndPos lexer.Position `parser:"" yaml:"-"`
-	Tokens []lexer.Token  `parser:"" yaml:"-"`
+func (s *Statement) HasStruct() bool {
+	return s != nil && s.Struct != nil
 }
-type DefaultStatement struct {
-	String *string `parser:"( (@String" yaml:"String,omitempty"`
-	Bool   *Bool   `parser:"| @('true' | 'false')" yaml:"Bool,omitempty"`
-	Number *Rat    `parser:"| @Rat)" yaml:"Number,omitempty"`
-
-	Type   string            `parser:"| ( @Ident?" yaml:"Type,omitempty"`
-	Props  []PropsStatement  `parser:"( '(' (@@ (',' @@)*)? ')' )?" yaml:"Props,omitempty"`
-	Struct []StructStatement `parser:"( '{' @@* '}' )? ) )" yaml:"Struct,omitempty"`
-
-	Pos    lexer.Position `parser:"" yaml:"-"`
-	EndPos lexer.Position `parser:"" yaml:"-"`
-	Tokens []lexer.Token  `parser:"" yaml:"-"`
+func (s *Statement) GetStruct() []Statement {
+	if !s.HasStruct() {
+		return nil
+	}
+	return *s.Struct
+}
+func (s *Statement) HasDefault() bool {
+	return s != nil && s.Default != nil
+}
+func (s *Statement) GetDefault() *Statement {
+	return s.Default
 }
 
 type Comment struct {

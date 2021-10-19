@@ -8,12 +8,15 @@ var (
 	pipe4Lexer = lexer.MustStateful(lexer.Rules{
 		"Root": {
 			{"LineComment", `(?://)[^\n]*(?:\n)?`, nil},
-			{"BlockCommentStart", `/\*`, lexer.Push("BlockCommentStart")}, // 3
-			{"Ident", `[a-zA-Z][\w-.]*`, nil},                             // 4
-			{"String", `"[^"]*"`, nil},                                    // 5
-			{"Rat", `\d+([./]\d+)?`, nil},                                 // 6
-			{"Punctuation", `[-[!@#$%^&*()+_={}\|:;"'<,>.?/]|]`, nil},     // 7
-			{"Whitespace", `[ \t\n\r]+`, nil},                             // 8
+			{"BlockCommentStart", `/\*`, lexer.Push("BlockCommentStart")},
+			{"Bool", `true|false`, nil},
+			{"Nil", `nil`, nil},
+			{"Void", `void`, nil},
+			{"Ident", `[a-zA-Z][\w-.]*`, nil},
+			{"String", `"[^"]*"`, nil},
+			{"Rat", `\d+([./]\d+)?`, nil},
+			{"Punctuation", `[-[!@#$%^&*()+_={}\|:;"'<,>.?/]|]`, nil},
+			{"Whitespace", `[ \t\n\r]+`, nil},
 		},
 		"BlockCommentStart": {
 			{"BlockCommentEnd", `\*/`, lexer.Pop()},
