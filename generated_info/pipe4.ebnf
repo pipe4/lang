@@ -1,6 +1,0 @@
-File = ("import" (Import | ("(" Import* ")")))* RootStatement* .
-Import = <ident>? <string> .
-RootStatement = ((<linecomment> | <blockcomment>)? (<ident> ((<string> | ("true" | "false") | <rat>) | (<ident>? ("(" (PropsStatement ("," PropsStatement)*)? ")")? ("{" StructStatement* "}")?)))?)! .
-PropsStatement = (<ident> | <string> | ("true" | "false") | <rat> | ("{" StructStatement* "}")) .
-StructStatement = ((<linecomment> | <blockcomment>)? (<ident> (((<string> | ("true" | "false") | <rat>) | (<ident> ("(" (PropsStatement ("," PropsStatement)*)? ")")? ("{" StructStatement* "}")?))? ("=" DefaultStatement)?)!)?)! .
-DefaultStatement = ((<string> | ("true" | "false") | <rat>) | (<ident>? ("(" (PropsStatement ("," PropsStatement)*)? ")")? ("{" StructStatement* "}")?)) .
