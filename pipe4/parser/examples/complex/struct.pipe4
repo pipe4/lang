@@ -1,3 +1,61 @@
+import (
+	"go-std"
+)
+
+/* go-std map
+type any = interface{}
+type Map struct {
+	map map[any]any
+}
+func (m *Map) Get(key any) any {
+	return m.map[key]
+}
+func (m *Map) Set(key any, val any) {
+	m.map[key] = val
+}
+
+type TypedMap Map
+func (m * TypedMap) Get(key K) V {
+	return V(m.Map.Get(key))
+}
+func (m * TypedMap) Set(key K, val V) {
+	m.Map.Set(key, val)
+}
+*/
+
+Map interface ({
+	K interface
+	V interface
+}) {
+	Get func(k K) V
+	Set func(k K, v V)
+}
+
+HashMap ({
+	K interface
+	V interface
+}) {
+	typedMap Map({K, V})
+
+	anyGoMap go-std.Map{}
+
+	return typedMap(anyGoMap)
+}
+
+StringMap Map({
+	K string
+	V int
+})
+
+StringMap HashMap({
+	K string
+	V int
+})
+
+versions StringMap
+versions.set("a", 1)
+versions.set("b", 2)
+bVersion versions.get("b")
 
 
 Person struct {

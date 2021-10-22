@@ -6,5 +6,5 @@ import (
 /*/lang:yaml test:ast/
 Statements:
 - Import:
-  - Url: github.com/pipe4/lang
+  - URL: github.com/pipe4/lang
 */

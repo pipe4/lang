@@ -6,8 +6,8 @@ import x-y-z4 "github/git"
 /*/lang:yaml test:ast/
 Statements:
 - Import:
-  - Url: github.com/pipe4/lang
+  - URL: github.com/pipe4/lang
     Name: pipe4-rename
-  - {Url: "https://google.com"}
-  - {Name: "x-y-z4", Url: "github/git"}
+  - {URL: "https://google.com"}
+  - {Name: "x-y-z4", URL: "github/git"}
 */

@@ -44,10 +44,10 @@ FullName unit({
 /*/lang:yaml test:ast/
 Statements:
 - Import:
-  - {Url: github.com/pipe4/lang}
-  - {Name: local-rename, Url: github.com/pipe4/lang/asd}
-  - {Name: pipe4, Url: github.com/pipe4/lang}
-  - {Url:  github.com/x/testify/require}
+  - {URL: github.com/pipe4/lang}
+  - {Name: local-rename, URL: github.com/pipe4/lang/asd}
+  - {Name: pipe4, URL: github.com/pipe4/lang}
+  - {URL:  github.com/x/testify/require}
 - {Name: URL, Type: string}
 - Name: BuildProto
   Type: unit

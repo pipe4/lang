@@ -56,7 +56,7 @@ type Statement struct {
 
 type Import struct {
 	Name string `parser:"@Ident?" yaml:"Name,omitempty"`
-	URL  string `parser:"@String" yaml:"Url,omitempty"`
+	URL  string `parser:"@String" yaml:"URL,omitempty"`
 
 	Pos    lexer.Position `parser:"" yaml:"-"`
 	EndPos lexer.Position `parser:"" yaml:"-"`
