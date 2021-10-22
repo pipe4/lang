@@ -2,8 +2,10 @@ package parser
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
@@ -22,10 +24,11 @@ var parser = participle.MustBuild(
 	}, "LineComment"),
 )
 
-func ParseString(source string) (*File, error) {
+func ParseString(path string, source string) (*File, error) {
 	file := &File{}
-	if err := parser.ParseString("", source, file); err != nil {
-		return nil, fmt.Errorf("failed parse pipe4 source: %w", err)
+	source = strings.ReplaceAll(source, "\r", "")
+	if err := parser.ParseString(path, source, file); err != nil {
+		return nil, fmt.Errorf("failed parse pipe4 file: %v: %w", path, err)
 	}
 	file.PostParse()
 	return file, nil
@@ -49,21 +52,15 @@ func LexFile(path string) ([]lexer.Token, error) {
 }
 
 func ParseFile(path string) (*File, error) {
-	ast := &File{}
-	file, err := os.Open(path)
+	// file, err := os.Open(path)
+	file, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed open file %v: %w", path, err)
+		return nil, fmt.Errorf("failed read file %v: %w", path, err)
 	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			log.Printf("failed to close file %v: %+v", path, err)
-		}
-	}()
-
-	if err := parser.Parse(path, file, ast); err != nil {
-		return nil, fmt.Errorf("failed parse pipe4 source: %w", err)
+	ast, err := ParseString(path, string(file))
+	if err != nil {
+		return nil, err
 	}
-	ast.PostParse()
 	return ast, nil
 }
 

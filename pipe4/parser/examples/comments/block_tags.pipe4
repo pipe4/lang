@@ -9,5 +9,6 @@ Statements:
     Tags:
       a: b
       p: c
-    Text: "some text\n"
+    Text: |
+      some text
 */
