@@ -11,7 +11,7 @@ import (
 )
 
 type File struct {
-	Name       string
+	Name       string      `parser:"" yaml:"-"`
 	Statements []Statement `parser:"@@*" yaml:"Statements,omitempty"`
 
 	Pos    lexer.Position `parser:"" yaml:"-"`
