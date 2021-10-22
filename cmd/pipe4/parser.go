@@ -68,8 +68,8 @@ var ParserRailroadCommand = &cli.Command{
 			return fmt.Errorf("failed create temp dir: %w", err)
 		}
 
-		railroadHtml := path.Join(tempDir, "./railroad.html")
-		cmd := exec.Command("go", "run", "-v", "github.com/alecthomas/participle/v2/cmd/railroad@latest", "-w", "-o", railroadHtml)
+		railroadHTML := path.Join(tempDir, "./railroad.html")
+		cmd := exec.Command("go", "run", "-v", "github.com/alecthomas/participle/v2/cmd/railroad@latest", "-w", "-o", railroadHTML)
 		cmd.Dir = tempDir
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
@@ -90,8 +90,8 @@ var ParserRailroadCommand = &cli.Command{
 		if err := cmd.Wait(); err != nil {
 			return fmt.Errorf("failed exec railroad generator:\n===EBNF===\n%v\n=====\n\n%+v", ebnf, err)
 		}
-		htmlUrl := url.URL{Scheme: "file", Path: railroadHtml}
-		if err := openBrowser(htmlUrl.String()); err != nil {
+		htmlURL := url.URL{Scheme: "file", Path: railroadHTML}
+		if err := openBrowser(htmlURL.String()); err != nil {
 			return fmt.Errorf("failed open generated railroad in default browser: %w", err)
 		}
 		return nil

@@ -7,20 +7,20 @@ import (
 var (
 	pipe4Lexer = lexer.MustStateful(lexer.Rules{
 		"Root": {
-			{"LineComment", `(?://)[^\n]*(?:\n)?`, nil},
-			{"BlockCommentStart", `/\*`, lexer.Push("BlockCommentStart")},
-			{"Bool", `true|false`, nil},
-			{"Nil", `nil`, nil},
-			{"Void", `void`, nil},
-			{"Ident", `[a-zA-Z][\w-.]*`, nil},
-			{"String", `"[^"]*"`, nil},
-			{"Rat", `\d+([./]\d+)?`, nil},
-			{"Punctuation", `[-[!@#$%^&*()+_={}\|:;"'<,>.?/]|]`, nil},
-			{"Whitespace", `[ \t\n\r]+`, nil},
+			{Name: "LineComment", Pattern: `(?://)[^\n]*(?:\n)?`},
+			{Name: "BlockCommentStart", Pattern: `/\*`, Action: lexer.Push("BlockCommentStart")},
+			{Name: "Bool", Pattern: `true|false`},
+			{Name: "Nil", Pattern: `nil`},
+			{Name: "Void", Pattern: `void`},
+			{Name: "Ident", Pattern: `[a-zA-Z][\w-.]*`},
+			{Name: "String", Pattern: `"[^"]*"`},
+			{Name: "Rat", Pattern: `\d+([./]\d+)?`},
+			{Name: "Punctuation", Pattern: `[-[!@#$%^&*()+_={}\|:;"'<,>.?/]|]`},
+			{Name: "Whitespace", Pattern: `[ \t\n\r]+`},
 		},
 		"BlockCommentStart": {
-			{"BlockCommentEnd", `\*/`, lexer.Pop()},
-			{"BlockComment", `[\s\S][^*]*`, nil},
+			{Name: "BlockCommentEnd", Pattern: `\*/`, Action: lexer.Pop()},
+			{Name: "BlockComment", Pattern: `[\s\S][^*]*`},
 		},
 		// 2
 	})

@@ -84,17 +84,11 @@ func testEqualAst(t *testing.T, got *File, want *File) {
 			return
 		}
 	})
-	return
 }
 func testEqualYamlAst(t *testing.T, got string, want string) {
 	t.Run("parsedAstEqualToTestInYaml", func(t *testing.T) {
 		assert.YAMLEqf(t, got, want, "ast not match")
-		// if !cmp.Equal(want, got) {
-		// 	t.Errorf("AST not match\n%v", cmp.Diff(want, got))
-		// 	return
-		// }
 	})
-	return
 }
 func testAst(t *testing.T, path string) {
 	t.Run(path, func(t *testing.T) {

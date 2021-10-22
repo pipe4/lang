@@ -1,4 +1,4 @@
-package lang_go
+package parser
 
 import (
 	"fmt"

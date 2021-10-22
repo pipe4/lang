@@ -55,7 +55,7 @@ type Statement struct {
 
 type Import struct {
 	Name string `parser:"@Ident?" yaml:"Name,omitempty"`
-	Url  string `parser:"@String" yaml:"Url,omitempty"`
+	URL  string `parser:"@String" yaml:"Url,omitempty"`
 
 	Pos    lexer.Position `parser:"" yaml:"-"`
 	EndPos lexer.Position `parser:"" yaml:"-"`
@@ -115,11 +115,12 @@ func (c *Comment) Capture(values []string) error {
 	tags := make(map[string]string)
 	for _, pair := range pairs {
 		kv := strings.Split(pair, ":")
-		if len(kv) == 2 {
+		switch {
+		case len(kv) == 2:
 			tags[kv[0]] = kv[1]
-		} else if len(kv) == 0 {
+		case len(kv) == 0:
 			tags[kv[0]] = ""
-		} else {
+		default:
 			return fmt.Errorf("failed to parse tag in format 'key:val' from '%v'", pair)
 		}
 	}

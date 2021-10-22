@@ -1,4 +1,4 @@
-package ast
+package internal
 
 import (
 	"math/big"
@@ -44,13 +44,14 @@ func constExprFromParser(s *parser.Statement) constExpr {
 		return constExpr{}
 	}
 	c := constExpr{}
-	if s.String != nil {
+	switch {
+	case s.String != nil:
 		c.string = stringExpr{value: *s.String}
 		c.constType = constString
-	} else if s.Number != nil {
+	case s.Number != nil:
 		c.rat = ratExpr{value: s.Number.Rat}
 		c.constType = constRat
-	} else if s.Bool != nil {
+	case s.Bool != nil:
 		c.bool = boolExpr{value: bool(*s.Bool)}
 		c.constType = constBool
 	}
