@@ -8,7 +8,7 @@ linters:
     - gocritic
     - gofmt
     - goimports
-    - golint
+    - revive
     - govet
     - gosimple
     - ineffassign

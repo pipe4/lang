@@ -16,11 +16,11 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - run: go test -v ./...
+      - run: go test ./...
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.42
+          version: v1.42.1
           skip-go-installation: true
           skip-pkg-cache: true
           skip-build-cache: true

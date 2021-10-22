@@ -12,7 +12,9 @@ type File struct {
 }
 
 func FileFromParser(s parser.File) File {
-	f := File{}
+	f := File{
+		name: s.Name,
+	}
 	s.Walk(func(s parser.StatementWithContext) {
 		for _, parserImport := range s.Import {
 			f.imports = append(f.imports, importFromParserAst(parserImport))
