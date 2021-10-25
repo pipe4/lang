@@ -1,25 +1,34 @@
 package ast
 
-type Ident interface {
-	Path() string
-	Package() Package
+import "crypto"
+
+type Ident struct {
+	// Name - ident path relative to package, for example: Ident/Path
+	Name string
+	// Filename relative to package directory, for example: ident.go
+	Filename string
+	// Package path relative to module, for example: pipe4/ast
+	Package string
+
+	Module
 }
 
-type Package interface {
-	Path() string
-	Module() Module
+type Module struct {
+	// URI that exactly identify module, for example: github.com/pipe4/lang
+	URI string
+
+	Version Version
+	Hash    Hash
+	Tags    []string
 }
 
-type Module interface {
-	URL() string
-	Version() Version
-	Hash() Hash
+type Version struct {
+	Major int
+	Minor int
+	Patch int
 }
 
-type Version interface {
-	String()
-}
-
-type Hash interface {
-	String()
+type Hash struct {
+	String string
+	Alg    crypto.Hash
 }
