@@ -2,12 +2,14 @@ package ast
 
 type Meta struct {
 	Filename string
-	Position MetaPosition
+	Position PositionRange
 }
 
-type MetaPosition struct {
-	FromRow int
-	FromCol int
-	ToRow   int
-	ToCol   int
+type PositionRange struct {
+	From Position
+	To   Position
+}
+type Position struct {
+	Row int
+	Col int
 }

@@ -3,32 +3,32 @@ package ast
 import "crypto"
 
 type Ident struct {
-	// Name - ident path relative to package, for example: Ident/Path
+	// Name of node relative to scope, for example: Name
 	Name string
+	// Scope of node relative to package, for example Ident
+	Scope string
 	// Filename relative to package directory, for example: ident.go
 	Filename string
 	// Package path relative to module, for example: pipe4/ast
 	Package string
 
-	Module
+	*Module
 }
 
 type Module struct {
 	// URI that exactly identify module, for example: github.com/pipe4/lang
-	URI string
-
-	Version Version
-	Hash    Hash
-	Tags    []string
+	Module string
+	Version
 }
 
 type Version struct {
 	Major int
 	Minor int
 	Patch int
-}
 
-type Hash struct {
-	String string
-	Alg    crypto.Hash
+	Ref  string
+	Tags []string
+
+	Hash crypto.Hash
+	Sum  string
 }

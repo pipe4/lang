@@ -1,21 +1,34 @@
 package ast
 
+import (
+	"math/big"
+)
+
 type Node struct {
+	Ident
 	Comment string
 
-	Ident   Ident
 	Type    Type
 	Default Type
 }
 
 type Type struct {
-	Const Const
+	Ident
+	Args []Node
 
-	Ident     Ident
-	Arguments []Node
-	Body      []Node
+	BodyType // one of
+	String   string
+	Rational big.Rat
+	Bool     bool
+	Struct   []Node
 }
 
-type Comment struct {
-	Text string
-}
+type BodyType uint8
+
+const (
+	Void BodyType = iota
+	String
+	Rational
+	Bool
+	Struct
+)
