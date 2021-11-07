@@ -76,7 +76,7 @@ func (c Statement) AstNode() ([]ast.Node, error) {
 	}
 	return []ast.Node{node}, nil
 }
-func (c Statements) AstNode() ([]ast.Node, error) {
+func (c Statements) AstNode() (ast.NodeList, error) {
 	var nodes []ast.Node
 	for _, s := range c {
 		subNodes, err := s.AstNode()
