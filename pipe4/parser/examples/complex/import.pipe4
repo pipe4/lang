@@ -11,11 +11,16 @@ import (
 
 /*/lang:yaml test:ast/
 Statements:
-- Import:
-  - URL: github.com/pipe4/lang
-  - Name: local-rename
-    URL: github.com/pipe4/lang/asd
-  - Name: pipe4
-    URL: github.com/pipe4/lang
-  - URL: github.com/x/testify/require
+  - SingleImport:
+      Import:
+        URL: github.com/pipe4/lang
+  - SingleImport:
+      Import:
+        Name: local-rename
+        URL: github.com/pipe4/lang/asd
+  - BlockImport:
+      Imports:
+        - Name: pipe4
+          URL: github.com/pipe4/lang
+        - URL: github.com/x/testify/require
 */

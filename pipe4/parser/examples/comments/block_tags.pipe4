@@ -5,10 +5,10 @@ some text
 
 /*/lang:yaml test:ast/
 Statements:
-- Comment:
-    Tags:
-      a: b
-      p: c
-    Text: |
-      some text
+  - Comment:
+      Tags:
+        a: b
+        p: c
+      Text: |
+        some text
 */

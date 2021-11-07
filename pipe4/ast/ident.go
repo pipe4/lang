@@ -12,13 +12,13 @@ type Ident struct {
 	// Package path relative to module, for example: pipe4/ast
 	Package string
 
-	*Module
+	Module *Module
 }
 
 type Module struct {
 	// URI that exactly identify module, for example: github.com/pipe4/lang
-	Module string
-	Version
+	URI     string
+	Version Version
 }
 
 type Version struct {

@@ -15,13 +15,13 @@ var parser = participle.MustBuild(
 	&File{},
 	participle.Lexer(pipe4Lexer),
 	participle.Elide("Whitespace", "BlockCommentStart", "BlockCommentEnd"),
-	participle.UseLookahead(2),
+	participle.UseLookahead(10),
 	participle.Unquote("String"),
-	participle.Map(func(token lexer.Token) (lexer.Token, error) {
-		// token.Value = strings.TrimPrefix(token.Value, "//")
-		// token.Value = strings.TrimSuffix(token.Value, "\n")
-		return token, nil
-	}, "LineComment"),
+	// participle.Map(func(token lexer.Token) (lexer.Token, error) {
+	// 	// token.Value = strings.TrimPrefix(token.Value, "//")
+	// 	// token.Value = strings.TrimSuffix(token.Value, "\n")
+	// 	return token, nil
+	// }, "LineComment"),
 )
 
 func ParseString(path string, source string) (*File, error) {
@@ -30,7 +30,7 @@ func ParseString(path string, source string) (*File, error) {
 	if err := parser.ParseString(path, source, file); err != nil {
 		return nil, fmt.Errorf("failed parse pipe4 file: %v: %w", path, err)
 	}
-	file.PostParse()
+	// file.PostParse()
 	return file, nil
 }
 

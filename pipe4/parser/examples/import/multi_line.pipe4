@@ -5,9 +5,15 @@ import x-y-z4 "github/git"
 
 /*/lang:yaml test:ast/
 Statements:
-- Import:
-  - URL: github.com/pipe4/lang
-    Name: pipe4-rename
-  - {URL: "https://google.com"}
-  - {Name: "x-y-z4", URL: "github/git"}
+  - SingleImport:
+      Import:
+        Name: pipe4-rename
+        URL: github.com/pipe4/lang
+  - SingleImport:
+      Import:
+        URL: https://google.com
+  - SingleImport:
+      Import:
+        Name: x-y-z4
+        URL: github/git
 */

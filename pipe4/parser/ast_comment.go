@@ -4,30 +4,23 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-
-	"github.com/alecthomas/participle/v2/lexer"
 )
 
 type Comment struct {
 	Tags Tags   `parser:"(  '/' @(Ident:Ident) (' ' @(Ident:Ident))* '/' )?"  yaml:"Tags,omitempty"`
 	Text string `parser:"" yaml:"Text,omitempty"`
 
-	Pos    lexer.Position `parser:"" yaml:"-"`
-	EndPos lexer.Position `parser:"" yaml:"-"`
-	Tokens []lexer.Token  `parser:"" yaml:"-"`
+	Meta `yaml:"-"`
 }
 
 var CommentRegexp = regexp.MustCompile(`(?m)^/(\w+:\w+)(?:\s+(\w+:\w+))*/(?:\s*\n)?([\s\S]*)$`)
 
 func (c *Comment) Capture(values []string) error {
-	if len(values) != 1 {
-		return fmt.Errorf("multiple comment merge into one not implemented: %+v", values)
+	*c = Comment{
+		Text: strings.Join(values, ""),
 	}
-	*c = Comment{}
-
-	matches := CommentRegexp.FindStringSubmatch(values[0])
+	matches := CommentRegexp.FindStringSubmatch(c.Text)
 	if matches == nil {
-		c.Text = values[0]
 		return nil
 	}
 	c.Text = matches[len(matches)-1]

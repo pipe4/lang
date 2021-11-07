@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"reflect"
 	"strings"
 	"testing"
 
@@ -41,11 +40,10 @@ func testParseFile(t *testing.T, path string) (ast *File) {
 		if err != nil {
 			assert.NoError(t, err, "error while parsing file")
 		}
-		got.Walk(func(s StatementWithContext) {
-			s.Pos = lexer.Position{}
-			s.EndPos = lexer.Position{}
-			// s.Tokens = nil
-		})
+		// ctx := WalkCtx{Down: func(ctx WalkCtx) {
+		// 	ctx.
+		// }}
+		// got.Statements.Walk(ctx)
 		ast = got
 		t.Logf("file:\n%# v", pretty.Formatter(got))
 	})
@@ -108,10 +106,7 @@ func testAst(t *testing.T, path string) {
 				continue
 			}
 			wantYaml = got.Statements[i].Comment.Text
-			got.Statements[i].Comment = nil
-			if reflect.DeepEqual(got.Statements[i], Statement{}) {
-				got.Statements = append(got.Statements[:i], got.Statements[i+1:]...)
-			}
+			got.Statements = append(got.Statements[:i], got.Statements[i+1:]...)
 		}
 		gotYaml := testToYaml(t, "toYamlParsedAst", got)
 		got = testFromYaml(t, "fromYamlParsedAst", gotYaml)
