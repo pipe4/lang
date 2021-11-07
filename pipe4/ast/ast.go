@@ -1,25 +1,25 @@
 package ast
 
 type Node struct {
-	Ident   Ident   `json:"Ident,omitempty"`
-	Comment Comment `json:"Comment,omitempty"`
+	Ident   Ident
+	Comment Comment
 
-	Type    Type `json:"Type,omitempty"`
-	Default Type `json:"Default,omitempty"`
+	Type    Type
+	Default Type
 }
 
 type NodeList []Node
 
 type Type struct {
-	Ident Ident    `json:"Ident,omitempty"`
-	Args  NodeList `json:"Args,omitempty"`
+	Ident Ident
+	Args  NodeList
 
-	BodyOneOf BodyOneOf `json:"BodyOneOf,omitempty"`
-	String    string    `json:"String,omitempty"`
-	Rational  Rational  `json:"Rational,omitempty"`
-	Bool      bool      `json:"Bool,omitempty"`
-	Struct    NodeList  `json:"Struct,omitempty"`
-	Type      *Type     `json:"Type,omitempty"`
+	BodyOneOf BodyOneOf
+	String    string
+	Rational  Rational
+	Bool      bool
+	Struct    NodeList
+	Type      *Type
 }
 
 type Comment struct {

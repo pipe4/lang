@@ -9,8 +9,6 @@ import (
 )
 
 func (l NodeList) ToYaml() (string, error) {
-	// pretty.Fprintf(os.Stdout, "%# v", ast)
-
 	buf, err := json.Marshal(l)
 	if err != nil {
 		return "", fmt.Errorf("failed print ast tree: %w", err)
@@ -31,8 +29,6 @@ func (l NodeList) ToYaml() (string, error) {
 	return str, nil
 }
 func (l *NodeList) FromYaml(source string) error {
-	// pretty.Fprintf(os.Stdout, "%# v", ast)
-
 	var m []interface{}
 	if err := yaml.Unmarshal([]byte(source), &m); err != nil {
 		return fmt.Errorf("failed to read ast from json: yaml.Unmarshal: %w", err)

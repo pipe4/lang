@@ -8,17 +8,17 @@ import (
 
 type Ident struct {
 	// Name of node relative to scope, for example: Name
-	Name string `json:"Name,omitempty"`
+	Name string
 	// Scope of node relative to package, for example Ident
-	Scope string `json:"Scope,omitempty"`
+	Scope string
 	// Filename relative to package directory, for example: ident.go
-	Filename string `json:"Filename,omitempty"`
+	Filename string
 	// Package path relative to module, for example: pipe4/ast
-	Package string `json:"Package,omitempty"`
+	Package string
 	// Module
-	Module *Module `json:"Module,omitempty"`
+	Module *Module
 	// ImportURI
-	ImportURI string `json:"ImportURI,omitempty"`
+	ImportURI string
 }
 
 func (i Ident) MarshalJSON() ([]byte, error) {
@@ -35,20 +35,20 @@ func (i *Ident) UnmarshalJSON(value []byte) error {
 
 type Module struct {
 	// URI that exactly identify module, for example: github.com/pipe4/lang
-	URI     string  `json:"URI,omitempty"`
-	Version Version `json:"Version,omitempty"`
+	URI     string
+	Version Version
 }
 
 type Version struct {
-	Major int `json:"Major,omitempty"`
-	Minor int `json:"Minor,omitempty"`
-	Patch int `json:"Patch,omitempty"`
+	Major int
+	Minor int
+	Patch int
 
-	Ref  string   `json:"Ref,omitempty"`
-	Tags []string `json:"Tags,omitempty"`
+	Ref  string
+	Tags []string
 
-	Hash crypto.Hash `json:"Hash,omitempty"`
-	Sum  string      `json:"Sum,omitempty"`
+	Hash crypto.Hash
+	Sum  string
 }
 
 func (i *Ident) Normalize() {
