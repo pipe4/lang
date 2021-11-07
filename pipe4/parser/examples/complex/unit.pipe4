@@ -222,3 +222,84 @@ Statements:
                                     Ident:
                                       Path: person.LastName
 */
+
+/*/lang:yaml test:ast.NodeList/
+- Ident: lang
+- Ident: local-rename
+- Ident: pipe4
+- Ident: require
+- Ident: URL
+  Type:
+    Ident: string
+- Ident: BuildProto
+  Type:
+    Args:
+      - Type:
+          Struct:
+            - Ident: url
+              Type:
+                Ident: URL
+    Ident: unit
+    Struct:
+      - Ident: ctx
+        Type:
+          Ident: Context
+          Struct:
+            - Default:
+                Ident: default.db.Sql
+              Ident: sql
+              Type:
+                Ident: db.Sql
+      - Ident: bob
+        Type:
+          Ident: Bob
+      - Ident: alex
+        Type:
+          Ident: Student
+          Struct:
+            - Ident: Name
+              Type:
+                String: Alex
+- Ident: BuildGit
+  Type:
+    Ident: unit
+    Struct: null
+- Ident: Person
+  Type:
+    Struct:
+      - Ident: FirstName
+        Type:
+          Ident: string
+      - Ident: LastName
+        Type:
+          Ident: string
+- Ident: FullName
+  Type:
+    Args:
+      - Type:
+          Struct:
+            - Default:
+                Struct:
+                  - Ident: FirstName
+                    Type:
+                      String: unknown
+                  - Ident: LastName
+                    Type:
+                      String: unknown
+              Ident: person
+              Type:
+                Ident: Person
+    Ident: unit
+    Struct:
+      - Ident: fullName
+        Type:
+          Args:
+            - Type:
+                String: ' '
+            - Type:
+                Ident: person.FirstName
+            - Type:
+                Ident: person.LastName
+          Ident: strings.Join
+*/
+

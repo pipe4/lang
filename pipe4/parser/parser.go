@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -9,7 +11,61 @@ import (
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
+	"gopkg.in/yaml.v3"
 )
+
+type Meta struct {
+	Pos    lexer.Position `parser:"" json:"-"`
+	EndPos lexer.Position `parser:"" json:"-"`
+	Tokens []lexer.Token  `parser:"" json:"-"`
+}
+
+type File struct {
+	Name       string     `parser:"" json:"-"`
+	Statements Statements `parser:"EOS* (@@ EOS+)*" json:"Statements,omitempty"`
+}
+
+func (f *File) ToYaml() (string, error) {
+	jsonOut := &bytes.Buffer{}
+	jsonEncoder := json.NewEncoder(jsonOut)
+	err := jsonEncoder.Encode(f)
+	if err != nil {
+		return "", fmt.Errorf("failed print ast tree: json.Marshal: %w", err)
+	}
+	m := make(map[string]interface{})
+	err = json.Unmarshal(jsonOut.Bytes(), &m)
+	if err != nil {
+		return "", fmt.Errorf("failed print ast tree: json.Unmarshal: %w", err)
+	}
+
+	// pretty.Fprintf(os.Stdout, "%# v", ast)
+	out := &strings.Builder{}
+	encoder := yaml.NewEncoder(out)
+	encoder.SetIndent(2)
+	if err := encoder.Encode(m); err != nil {
+		return "", fmt.Errorf("failed print ast tree: yaml.Encode: %w", err)
+	}
+	str := out.String()
+	// str = strings.ReplaceAll(str, "  - ", "- ")
+	return str, nil
+}
+
+func (f *File) FromYaml(source string) error {
+	m := make(map[string]interface{})
+	if err := yaml.Unmarshal([]byte(source), &m); err != nil {
+		return fmt.Errorf("failed to read ast from json: yaml.Unmarshal: %w", err)
+	}
+	buf, err := json.Marshal(m)
+	if err != nil {
+		return fmt.Errorf("failed to read ast from json: json.Marshal: %w", err)
+	}
+
+	err = json.Unmarshal(buf, f)
+	if err != nil {
+		return fmt.Errorf("failed to read ast from json: json.Unmarshal: %w", err)
+	}
+	return nil
+}
 
 var parser = participle.MustBuild(
 	&File{},
@@ -63,79 +119,6 @@ func ParseFile(path string) (*File, error) {
 	}
 	return ast, nil
 }
-
-// func (f *File) PostParse() {
-// 	f.Walk(func(s StatementWithContext) {
-// 		switch s.Context {
-// 		case DefaultContext:
-// 			s.PostParseNameToType()
-// 		case ArgsContext:
-// 			s.PostParseNameToType()
-// 		}
-// 	})
-// }
-
-// type StatementWithContext struct {
-// 	*Statement
-//
-// 	Parent *Statement
-// 	Prev   *Statement
-// 	Next   *Statement
-// }
-//
-// func (s *Statement) Walk(walker func(s *Statement, parent *Statement)) {
-// 	if s == nil {
-// 		return
-// 	}
-// 	que := []StatementWithContext{{FileContext, s}}
-// 	var next StatementWithContext
-//
-// 	for len(que) > 0 {
-// 		// que.pop()
-// 		next, que = que[len(que)-1], que[:len(que)-1]
-//
-// 		props := next.GetArgs()
-// 		for i := range props {
-// 			que = append(que, StatementWithContext{ArgsContext, &props[i]})
-// 		}
-//
-// 		structure := next.GetStruct()
-// 		for i := range structure {
-// 			que = append(que, StatementWithContext{StructContext, &structure[i]})
-// 		}
-//
-// 		if next.Default != nil {
-// 			que = append(que, StatementWithContext{DefaultContext, next.Default})
-// 		}
-//
-// 		walker(next)
-// 	}
-// }
-//
-// func (f *File) Walk(walker func(s StatementWithContext)) {
-// 	for i := range f.Statements {
-// 		f.Statements[i].Walk(walker)
-// 	}
-// }
-//
-// type StatementContext string
-//
-// const (
-// 	FileContext    = "FileContext"
-// 	ArgsContext    = "ArgsContext"
-// 	StructContext  = "StructContext"
-// 	DefaultContext = "DefaultContext"
-// )
-
-// func (s *Statement) PostParseNameToType() {
-// 	if s == nil {
-// 		return
-// 	}
-// 	if s.Type == "" {
-// 		s.Type = s.Name
-// 		s.Name = ""
-// 	}
-// }
 
 func GetBnf() string {
 	return parser.String()

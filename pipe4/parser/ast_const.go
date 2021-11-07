@@ -3,17 +3,32 @@ package parser
 import (
 	"fmt"
 	"math/big"
-	"strings"
 
-	"gopkg.in/yaml.v3"
+	"github.com/pipe4/lang/pipe4/ast"
 )
 
 type Const struct {
-	String   *string   `parser:"@String" yaml:"String,omitempty"`
-	Bool     *Bool     `parser:"| @Bool" yaml:"Bool,omitempty"`
-	Rational *Rational `parser:"| @Rational" yaml:"Rational,omitempty"`
+	String   *string   `parser:"@String" json:"String,omitempty"`
+	Bool     *Bool     `parser:"| @Bool" json:"Bool,omitempty"`
+	Rational *Rational `parser:"| @Rational" json:"Rational,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
+}
+
+func (c Const) AstType() (*ast.Type, error) {
+	t := &ast.Type{}
+	switch {
+	case c.String != nil:
+		t.SetString(*c.String)
+	case c.Bool != nil:
+		t.SetBool(bool(*c.Bool))
+	case c.Rational != nil:
+		t.SetRational(c.Rational.Rat)
+	default:
+		return nil, fmt.Errorf("%v: unimplemented const type: %+v", c.Meta.Pos, c)
+	}
+
+	return t, nil
 }
 
 type Bool bool
@@ -53,25 +68,5 @@ func (r *Rational) Capture(values []string) error {
 		return fmt.Errorf("failed parse rational number from string: '%v'", values[0])
 	}
 	*r = Rational{*rat}
-	return nil
-}
-
-func (f *File) ToYaml() (string, error) {
-	// pretty.Fprintf(os.Stdout, "%# v", ast)
-	out := &strings.Builder{}
-	encoder := yaml.NewEncoder(out)
-	encoder.SetIndent(2)
-	if err := encoder.Encode(f); err != nil {
-		return "", fmt.Errorf("failed print ast tree: %w", err)
-	}
-	str := out.String()
-	// str = strings.ReplaceAll(str, "  - ", "- ")
-	return str, nil
-}
-
-func (f *File) FromYaml(source string) error {
-	if err := yaml.Unmarshal([]byte(source), f); err != nil {
-		return fmt.Errorf("failed to read ast from yaml: %w", err)
-	}
 	return nil
 }

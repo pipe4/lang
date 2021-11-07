@@ -7,8 +7,25 @@ some text
 Statements:
   - Comment:
       Tags:
-        a: b
-        p: c
+        - Ident: a
+          Type:
+            String: b
+        - Ident: p
+          Type:
+            String: c
       Text: |
         some text
+*/
+
+/*/lang:yaml test:ast.NodeList/
+- Comment:
+    Tags:
+      - Ident: a
+        Type:
+          String: b
+      - Ident: p
+        Type:
+          String: c
+    Text: |
+      some text
 */

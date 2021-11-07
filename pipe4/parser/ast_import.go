@@ -1,18 +1,44 @@
 package parser
 
-type Import struct {
-	Name string `parser:"@Ident?" yaml:"Name,omitempty"`
-	URL  string `parser:"@String" yaml:"URL,omitempty"`
+import "github.com/pipe4/lang/pipe4/ast"
 
-	Meta `yaml:"-"`
+type Import struct {
+	Name string `parser:"@Ident?" json:"Name,omitempty"`
+	URL  string `parser:"@String" json:"URL,omitempty"`
+
+	Meta `json:"-"`
 }
 type SingleImport struct {
-	Import Import `parser:"'import' @@ " yaml:"Import,omitempty"`
+	Import Import `parser:"'import' @@ " json:"Import,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
 }
 type BlockImport struct {
-	Imports []Import `parser:"'import' '(' EOS* (@@ EOS)*  @@? EOS* ')'" yaml:"Imports,omitempty"`
+	Imports []Import `parser:"'import' '(' EOS* (@@ EOS)*  @@? EOS* ')'" json:"Imports,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
+}
+
+func (c Import) AstNode() *ast.Node {
+	if c.URL == "" {
+		return nil
+	}
+	ident := ast.Ident{Name: c.Name, ImportURI: c.URL}
+	ident.Normalize()
+	return &ast.Node{Ident: ident}
+}
+
+func (c BlockImport) AstNode() []ast.Node {
+	var imports []ast.Node
+	for _, i := range c.Imports {
+		node := i.AstNode()
+		if node != nil {
+			imports = append(imports, *node)
+		}
+	}
+	return imports
+}
+
+func (c SingleImport) AstNode() *ast.Node {
+	return c.Import.AstNode()
 }

@@ -4,16 +4,30 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/pipe4/lang/pipe4/ast"
 )
 
 type Comment struct {
-	Tags Tags   `parser:"(  '/' @(Ident:Ident) (' ' @(Ident:Ident))* '/' )?"  yaml:"Tags,omitempty"`
-	Text string `parser:"" yaml:"Text,omitempty"`
+	Tags ast.NodeList `parser:"(  '/' @(Ident:Ident) (' ' @(Ident:Ident))* '/' )?"  json:"Tags,omitempty"`
+	Text string       `parser:"" json:"Text,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
 }
 
-var CommentRegexp = regexp.MustCompile(`(?m)^/(\w+:\w+)(?:\s+(\w+:\w+))*/(?:\s*\n)?([\s\S]*)$`)
+func (c Comment) AstNode() *ast.Node {
+	if c.Text == "" {
+		return nil
+	}
+	return &ast.Node{
+		Comment: ast.Comment{
+			Text: c.Text,
+			Tags: c.Tags,
+		},
+	}
+}
+
+var CommentRegexp = regexp.MustCompile(`(?m)^/([\w.-]+:[\w.-]+)(?:\s+([\w.-]+:[\w.-]+))*/(?:\s*\n)?([\s\S]*)$`)
 
 func (c *Comment) Capture(values []string) error {
 	*c = Comment{
@@ -26,29 +40,20 @@ func (c *Comment) Capture(values []string) error {
 	c.Text = matches[len(matches)-1]
 	pairs := matches[1 : len(matches)-1]
 
-	tags := make(map[string]string)
 	for _, pair := range pairs {
 		kv := strings.Split(pair, ":")
+		tag := ast.Node{}
 		switch {
 		case len(kv) == 2:
-			tags[kv[0]] = kv[1]
-		case len(kv) == 0:
-			tags[kv[0]] = ""
+			tag.Ident.Name = kv[0]
+			tag.Type.SetString(kv[1])
+		case len(kv) == 1:
+			tag.Ident.Name = kv[0]
+			tag.Type.SetString("")
 		default:
 			return fmt.Errorf("failed to parse tag in format 'key:val' from '%v'", pair)
 		}
-	}
-	if len(tags) > 0 {
-		c.Tags = tags
+		c.Tags = append(c.Tags, tag)
 	}
 	return nil
-}
-
-type Tags map[string]string
-
-func (c *Comment) GetTag(name string) string {
-	if c == nil || c.Tags == nil {
-		return ""
-	}
-	return c.Tags[name]
 }

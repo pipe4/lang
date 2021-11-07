@@ -1,71 +1,125 @@
 package parser
 
+import (
+	"fmt"
+
+	"github.com/pipe4/lang/pipe4/ast"
+)
+
 type Type struct {
-	Args Args `parser:"@@?" yaml:"Args,omitempty"`
+	Args *Args `parser:"@@?" json:"Args,omitempty"`
 
-	IdentWithType *IdentWithType `parser:"(@@" yaml:"IdentWithType,omitempty"`
-	IdentWithArgs *IdentWithArgs `parser:"| @@" yaml:"IdentWithArgs,omitempty"`
-	Ident         *Ident         `parser:"| @@" yaml:"Ident,omitempty"`
-	Const         *Const         `parser:"| @@" yaml:"Const,omitempty"`
-	Struct        *Struct        `parser:"| @@)" yaml:"Struct,omitempty"`
+	IdentWithType *IdentWithType `parser:"(@@" json:"IdentWithType,omitempty"`
+	IdentWithArgs *IdentWithArgs `parser:"| @@" json:"IdentWithArgs,omitempty"`
+	Ident         *Ident         `parser:"| @@" json:"Ident,omitempty"`
+	Const         *Const         `parser:"| @@" json:"Const,omitempty"`
+	Struct        *Struct        `parser:"| @@)" json:"Struct,omitempty"`
 
-	Meta `yaml:"-"`
-}
-
-func (s *Type) Walk(ctx WalkCtx) {
-	// if s != nil {
-	// 	// s.Struct.Walk(ctx)
-	// 	// s.TypeWithLeftArgs.Walk(ctx)
-	// 	// s.TypeWithRightArgs.Walk(ctx)
-	// }
+	Meta `json:"-"`
 }
 
 type IdentWithType struct {
-	Ident Ident `parser:"@@" yaml:"Ident,omitempty"`
-	Type  Type  `parser:"@@" yaml:"Type,omitempty"`
+	Ident Ident `parser:"@@" json:"Ident,omitempty"`
+	Type  Type  `parser:"@@" json:"Type,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
 }
 
 type IdentWithArgs struct {
-	Ident Ident `parser:"@@" yaml:"Type,omitempty"`
-	Args  Args  `parser:"@@" yaml:"Args,omitempty"`
+	Ident Ident `parser:"@@" json:"Type,omitempty"`
+	Args  Args  `parser:"@@" json:"Args,omitempty"`
 
-	Meta `yaml:"-"`
-}
-
-func (s *IdentWithArgs) Walk(ctx WalkCtx) {
-	if s != nil {
-		s.Args.Walk(ctx)
-	}
+	Meta `json:"-"`
 }
 
 type Ident struct {
-	Path string `parser:"@Ident" yaml:"Path,omitempty"`
+	Path string `parser:"@Ident" json:"Path,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
 }
 
 type Struct struct {
-	Statements []Statement `parser:"'{' EOS* (@@ ((EOS|',')+ @@)*)? EOS* '}'" yaml:"Statements,omitempty"`
+	Statements Statements `parser:"'{' EOS* (@@ ((EOS|',')+ @@)*)? EOS* '}'" json:"Statements,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
 }
-
-func (s *Struct) Walk(ctx WalkCtx) {
-	if s != nil {
-		Statements(s.Statements).Walk(ctx)
-	}
-}
-
 type Args struct {
-	Statements []Statement `parser:"'(' EOS* (@@ ((EOS|',')+ @@)*)? EOS* ')'" yaml:"Statements,omitempty"`
+	Statements Statements `parser:"'(' EOS* (@@ ((EOS|',')+ @@)*)? EOS* ')'" json:"Statements,omitempty"`
 
-	Meta `yaml:"-"`
+	Meta `json:"-"`
 }
 
-func (s *Args) Walk(ctx WalkCtx) {
-	if s != nil {
-		Statements(s.Statements).Walk(ctx)
+func (c Struct) AstNode() ([]ast.Node, error) {
+	return c.Statements.AstNode()
+}
+func (c Args) AstNode() ([]ast.Node, error) {
+	return c.Statements.AstNode()
+}
+
+func (c Type) AstType() (*ast.Type, error) {
+	t := &ast.Type{}
+	if c.Args != nil {
+		if args, err := c.Args.AstNode(); err != nil {
+			return nil, err
+		} else if len(args) > 0 {
+			t.Args = args
+		}
+	}
+	switch {
+	case c.IdentWithArgs != nil:
+		identWithArgs := &ast.Type{
+			Ident: ast.Ident{
+				Name: c.IdentWithArgs.Ident.Path,
+			},
+		}
+		if args, err := c.IdentWithArgs.Args.AstNode(); err != nil {
+			return nil, err
+		} else if len(args) > 0 {
+			identWithArgs.Args = args
+		}
+		if t.Args == nil {
+			return identWithArgs, nil
+		}
+		if identWithArgs.Args == nil {
+			t.Ident = identWithArgs.Ident
+			return t, nil
+		}
+		t.Type = identWithArgs
+		t.BodyOneOf = ast.BodyType
+		return t, nil
+	case c.IdentWithType != nil:
+		t.Ident.Name = c.IdentWithType.Ident.Path
+		subType, err := c.IdentWithType.Type.AstType()
+		if err != nil {
+			return nil, err
+		}
+		if subType.Ident.Name != "" || len(t.Args) > 0 {
+			t.Type = subType
+			t.BodyOneOf = ast.BodyType
+			return t, nil
+		}
+		subType.Ident = t.Ident
+		return subType, nil
+	case c.Ident != nil:
+		t.Ident.Name = c.Ident.Path
+		return t, nil
+	case c.Const != nil:
+		subType, err := c.Const.AstType()
+		if err != nil {
+			return nil, err
+		}
+		subType.Ident = t.Ident
+		subType.Args = t.Args
+		return subType, nil
+	case c.Struct != nil:
+		subNodes, err := c.Struct.AstNode()
+		if err != nil {
+			return nil, err
+		}
+		t.BodyOneOf = ast.BodyStruct
+		t.Struct = subNodes
+		return t, nil
+	default:
+		return nil, fmt.Errorf("failed to get Type.AstType(), expected one of fields to set, but no one found in %v: %+v", c.Pos, c)
 	}
 }
