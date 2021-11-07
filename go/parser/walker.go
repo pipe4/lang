@@ -16,18 +16,18 @@ type Ctx struct {
 type StructCtx struct {
 	*pipe4ast.NodeList
 
-	err string
+	Err string
 }
 
 type NodeCtx struct {
 	*pipe4ast.Node
 
-	err string
+	Err string
 }
 type TypeCtx struct {
 	*pipe4ast.Type
 
-	err string
+	Err string
 }
 
 func (c *StructCtx) NewNode() *NodeCtx {
@@ -79,7 +79,8 @@ func (c *NodeCtx) Visit(n ast.Node) (w ast.Visitor) {
 		return nil
 	case *ast.Field:
 		if len(x.Names) != 1 {
-			c.err = fmt.Sprintf("unimplemented multiple names for field: %+v", x.Names)
+			c.Err = fmt.Sprintf("unimplemented multiple names for field: %+v", x.Names)
+			log.Printf("%+v", c.Err)
 			return nil
 		}
 		c.Ident.Name = x.Names[0].Name
