@@ -40,46 +40,266 @@ FullName unit({
 }
 
 
-
 /*/lang:yaml test:ast/
 Statements:
-- Import:
-  - {Url: github.com/pipe4/lang}
-  - {Name: local-rename, Url: github.com/pipe4/lang/asd}
-  - {Name: pipe4, Url: github.com/pipe4/lang}
-  - {Url:  github.com/x/testify/require}
-- {Name: URL, Type: string}
-- Name: BuildProto
-  Type: unit
-  Props: [{Struct: [{Name: url, Type: URL}]}]
-  Struct:
-  - {Name: ctx, Type: Context, Struct: [{Name: sql, Type: db.Sql, Default: {Type: default.db.Sql}}]}
-  - {Name: bob, Type: Bob}
-  - {Name: alex, Type: Student, Struct: [{Name: Name, String: Alex}]}
-- {Name: BuildGit, Type: unit}
-- Name: Person
-  Struct:
-  - Name: FirstName
-    Type: string
-  - Name: LastName
-    Type: string
-- Name: FullName
-  Type: unit
-  Props:
-  - Struct:
-    - Name: person
-      Type: Person
-      Default:
-        Struct:
-        - Name: FirstName
-          String: unknown
-        - Name: LastName
-          String: unknown
-  Struct:
-  - Name: fullName
-    Type: strings.Join
-    Props:
-    - String: ' '
-    - Type: person.FirstName
-    - Type: person.LastName
+  - SingleImport:
+      Import:
+        URL: github.com/pipe4/lang
+  - SingleImport:
+      Import:
+        Name: local-rename
+        URL: github.com/pipe4/lang/asd
+  - BlockImport:
+      Imports:
+        - Name: pipe4
+          URL: github.com/pipe4/lang
+        - URL: github.com/x/testify/require
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: URL
+        Type:
+          Ident:
+            Path: string
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: BuildProto
+        Type:
+          IdentWithType:
+            Ident:
+              Path: unit
+            Type:
+              Args:
+                Statements:
+                  - Type:
+                      Struct:
+                        Statements:
+                          - Type:
+                              IdentWithType:
+                                Ident:
+                                  Path: url
+                                Type:
+                                  Ident:
+                                    Path: URL
+              Struct:
+                Statements:
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: ctx
+                        Type:
+                          IdentWithType:
+                            Ident:
+                              Path: Context
+                            Type:
+                              Struct:
+                                Statements:
+                                  - Type:
+                                      IdentWithType:
+                                        Ident:
+                                          Path: sql
+                                        Type:
+                                          Ident:
+                                            Path: db.Sql
+                                    Default:
+                                      Ident:
+                                        Path: default.db.Sql
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: bob
+                        Type:
+                          Ident:
+                            Path: Bob
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: alex
+                        Type:
+                          IdentWithType:
+                            Ident:
+                              Path: Student
+                            Type:
+                              Struct:
+                                Statements:
+                                  - Type:
+                                      IdentWithType:
+                                        Ident:
+                                          Path: Name
+                                        Type:
+                                          Const:
+                                            String: Alex
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: BuildGit
+        Type:
+          IdentWithType:
+            Ident:
+              Path: unit
+            Type:
+              Args: {}
+              Struct: {}
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Person
+        Type:
+          Struct:
+            Statements:
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: FirstName
+                    Type:
+                      Ident:
+                        Path: string
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: LastName
+                    Type:
+                      Ident:
+                        Path: string
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: FullName
+        Type:
+          IdentWithType:
+            Ident:
+              Path: unit
+            Type:
+              Args:
+                Statements:
+                  - Type:
+                      Struct:
+                        Statements:
+                          - Type:
+                              IdentWithType:
+                                Ident:
+                                  Path: person
+                                Type:
+                                  Ident:
+                                    Path: Person
+                            Default:
+                              Struct:
+                                Statements:
+                                  - Type:
+                                      IdentWithType:
+                                        Ident:
+                                          Path: FirstName
+                                        Type:
+                                          Const:
+                                            String: unknown
+                                  - Type:
+                                      IdentWithType:
+                                        Ident:
+                                          Path: LastName
+                                        Type:
+                                          Const:
+                                            String: unknown
+              Struct:
+                Statements:
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: fullName
+                        Type:
+                          IdentWithArgs:
+                            Type:
+                              Path: strings.Join
+                            Args:
+                              Statements:
+                                - Type:
+                                    Const:
+                                      String: ' '
+                                - Type:
+                                    Ident:
+                                      Path: person.FirstName
+                                - Type:
+                                    Ident:
+                                      Path: person.LastName
 */
+
+/*/lang:yaml test:ast.NodeList/
+- Ident: lang
+- Ident: local-rename
+- Ident: pipe4
+- Ident: require
+- Ident: URL
+  Type:
+    Ident: string
+- Ident: BuildProto
+  Type:
+    Args:
+      - Type:
+          Struct:
+            - Ident: url
+              Type:
+                Ident: URL
+    Ident: unit
+    Struct:
+      - Ident: ctx
+        Type:
+          Ident: Context
+          Struct:
+            - Default:
+                Ident: default.db.Sql
+              Ident: sql
+              Type:
+                Ident: db.Sql
+      - Ident: bob
+        Type:
+          Ident: Bob
+      - Ident: alex
+        Type:
+          Ident: Student
+          Struct:
+            - Ident: Name
+              Type:
+                String: Alex
+- Ident: BuildGit
+  Type:
+    Ident: unit
+    Struct: null
+- Ident: Person
+  Type:
+    Struct:
+      - Ident: FirstName
+        Type:
+          Ident: string
+      - Ident: LastName
+        Type:
+          Ident: string
+- Ident: FullName
+  Type:
+    Args:
+      - Type:
+          Struct:
+            - Default:
+                Struct:
+                  - Ident: FirstName
+                    Type:
+                      String: unknown
+                  - Ident: LastName
+                    Type:
+                      String: unknown
+              Ident: person
+              Type:
+                Ident: Person
+    Ident: unit
+    Struct:
+      - Ident: fullName
+        Type:
+          Args:
+            - Type:
+                String: ' '
+            - Type:
+                Ident: person.FirstName
+            - Type:
+                Ident: person.LastName
+          Ident: strings.Join
+*/
+

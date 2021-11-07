@@ -1,0 +1,249 @@
+
+Vector (type message, size int) {
+	buffer array(type, size)
+}
+
+Float3DVector Vector(type float, size 3)
+
+Triangle3D {
+	points Vector(type Float3DVector, size 3)
+}
+
+MyTriangle Triangle3D {
+	points {
+		{1/2, 2, 3}
+		{1/3, 5, 6}
+		{0.33, 8, 9}
+	}
+}
+
+/*/lang:yaml test:ast.NodeList/
+- Ident: Vector
+  Type:
+    Args:
+      - Ident: type
+        Type:
+          Ident: message
+      - Ident: size
+        Type:
+          Ident: int
+    Struct:
+      - Ident: buffer
+        Type:
+          Args:
+            - Type:
+                Ident: type
+            - Type:
+                Ident: size
+          Ident: array
+- Ident: Float3DVector
+  Type:
+    Args:
+      - Ident: type
+        Type:
+          Ident: float
+      - Ident: size
+        Type:
+          Rational: "3"
+    Ident: Vector
+- Ident: Triangle3D
+  Type:
+    Struct:
+      - Ident: points
+        Type:
+          Args:
+            - Ident: type
+              Type:
+                Ident: Float3DVector
+            - Ident: size
+              Type:
+                Rational: "3"
+          Ident: Vector
+- Ident: MyTriangle
+  Type:
+    Ident: Triangle3D
+    Struct:
+      - Ident: points
+        Type:
+          Struct:
+            - Type:
+                Struct:
+                  - Type:
+                      Rational: 1/2
+                  - Type:
+                      Rational: "2"
+                  - Type:
+                      Rational: "3"
+            - Type:
+                Struct:
+                  - Type:
+                      Rational: 1/3
+                  - Type:
+                      Rational: "5"
+                  - Type:
+                      Rational: "6"
+            - Type:
+                Struct:
+                  - Type:
+                      Rational: 33/100
+                  - Type:
+                      Rational: "8"
+                  - Type:
+                      Rational: "9"
+
+*/
+
+
+
+/*/lang:yaml test:ast/
+Statements:
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Vector
+        Type:
+          Args:
+            Statements:
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: type
+                    Type:
+                      Ident:
+                        Path: message
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: size
+                    Type:
+                      Ident:
+                        Path: int
+          Struct:
+            Statements:
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: buffer
+                    Type:
+                      IdentWithArgs:
+                        Args:
+                          Statements:
+                            - Type:
+                                Ident:
+                                  Path: type
+                            - Type:
+                                Ident:
+                                  Path: size
+                        Type:
+                          Path: array
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Float3DVector
+        Type:
+          IdentWithArgs:
+            Args:
+              Statements:
+                - Type:
+                    IdentWithType:
+                      Ident:
+                        Path: type
+                      Type:
+                        Ident:
+                          Path: float
+                - Type:
+                    IdentWithType:
+                      Ident:
+                        Path: size
+                      Type:
+                        Const:
+                          Rational: "3"
+            Type:
+              Path: Vector
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Triangle3D
+        Type:
+          Struct:
+            Statements:
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: points
+                    Type:
+                      IdentWithArgs:
+                        Args:
+                          Statements:
+                            - Type:
+                                IdentWithType:
+                                  Ident:
+                                    Path: type
+                                  Type:
+                                    Ident:
+                                      Path: Float3DVector
+                            - Type:
+                                IdentWithType:
+                                  Ident:
+                                    Path: size
+                                  Type:
+                                    Const:
+                                      Rational: "3"
+                        Type:
+                          Path: Vector
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: MyTriangle
+        Type:
+          IdentWithType:
+            Ident:
+              Path: Triangle3D
+            Type:
+              Struct:
+                Statements:
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: points
+                        Type:
+                          Struct:
+                            Statements:
+                              - Type:
+                                  Struct:
+                                    Statements:
+                                      - Type:
+                                          Const:
+                                            Rational: 1/2
+                                      - Type:
+                                          Const:
+                                            Rational: "2"
+                                      - Type:
+                                          Const:
+                                            Rational: "3"
+                              - Type:
+                                  Struct:
+                                    Statements:
+                                      - Type:
+                                          Const:
+                                            Rational: 1/3
+                                      - Type:
+                                          Const:
+                                            Rational: "5"
+                                      - Type:
+                                          Const:
+                                            Rational: "6"
+                              - Type:
+                                  Struct:
+                                    Statements:
+                                      - Type:
+                                          Const:
+                                            Rational: 33/100
+                                      - Type:
+                                          Const:
+                                            Rational: "8"
+                                      - Type:
+                                          Const:
+                                            Rational: "9"
+
+*/

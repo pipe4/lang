@@ -1,0 +1,12 @@
+Student Person
+
+/*/lang:yaml test:ast/
+Statements:
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Student
+        Type:
+          Ident:
+            Path: Person
+*/

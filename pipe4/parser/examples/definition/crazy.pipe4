@@ -1,0 +1,28 @@
+a b (c 1) d x y (e 2) v {x 3}
+
+/*/lang:yaml test:ast.NodeList/
+- Ident: a
+  Type:
+    Ident: b
+    Type:
+      Args:
+        - Ident: c
+          Type:
+            Rational: "1"
+      Ident: d
+      Type:
+        Ident: x
+        Type:
+          Ident: "y"
+          Type:
+            Args:
+              - Ident: e
+                Type:
+                  Rational: "2"
+            Ident: v
+            Type:
+              Struct:
+                - Ident: x
+                  Type:
+                    Rational: "3"
+*/

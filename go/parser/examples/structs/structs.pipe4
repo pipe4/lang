@@ -1,0 +1,6 @@
+
+Person {
+	FirstName string
+	LastName string
+	Age int
+}

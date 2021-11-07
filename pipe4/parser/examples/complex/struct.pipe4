@@ -1,6 +1,38 @@
+import (
+	"go-std"
+)
+
+Map interface (
+	K interface
+	V interface
+) {
+	Get func(k K) V {}
+	Set func(k K, v V) {}
+}
+
+HashMap (
+	K interface
+	V interface
+) {
+	typedMap Map(K, V)
+
+	anyGoMap go-std.Map{}
+
+	return typedMap(anyGoMap)
+}
+
+StringMap Map(
+	K string
+	V int
+)
+
+StringMap HashMap(
+	K string
+	V int
+)
 
 
-Person struct {
+Person {
     Name string
     Iq float64
     Age int64
@@ -17,26 +49,385 @@ Bob Student {
 
 /*/lang:yaml test:ast/
 Statements:
-  - Name: Person
-    Type: struct
+  - BlockImport:
+      Imports:
+        - URL: go-std
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Map
+        Type:
+          IdentWithType:
+            Ident:
+              Path: interface
+            Type:
+              Args:
+                Statements:
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: K
+                        Type:
+                          Ident:
+                            Path: interface
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: V
+                        Type:
+                          Ident:
+                            Path: interface
+              Struct:
+                Statements:
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: Get
+                        Type:
+                          IdentWithType:
+                            Ident:
+                              Path: func
+                            Type:
+                              Args:
+                                Statements:
+                                  - Type:
+                                      IdentWithType:
+                                        Ident:
+                                          Path: k
+                                        Type:
+                                          Ident:
+                                            Path: K
+                              IdentWithType:
+                                Ident:
+                                  Path: V
+                                Type:
+                                  Struct: {}
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: Set
+                        Type:
+                          IdentWithType:
+                            Ident:
+                              Path: func
+                            Type:
+                              Args:
+                                Statements:
+                                  - Type:
+                                      IdentWithType:
+                                        Ident:
+                                          Path: k
+                                        Type:
+                                          Ident:
+                                            Path: K
+                                  - Type:
+                                      IdentWithType:
+                                        Ident:
+                                          Path: v
+                                        Type:
+                                          Ident:
+                                            Path: V
+                              Struct: {}
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: HashMap
+        Type:
+          Args:
+            Statements:
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: K
+                    Type:
+                      Ident:
+                        Path: interface
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: V
+                    Type:
+                      Ident:
+                        Path: interface
+          Struct:
+            Statements:
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: typedMap
+                    Type:
+                      IdentWithArgs:
+                        Type:
+                          Path: Map
+                        Args:
+                          Statements:
+                            - Type:
+                                Ident:
+                                  Path: K
+                            - Type:
+                                Ident:
+                                  Path: V
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: anyGoMap
+                    Type:
+                      IdentWithType:
+                        Ident:
+                          Path: go-std.Map
+                        Type:
+                          Struct: {}
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: return
+                    Type:
+                      IdentWithArgs:
+                        Type:
+                          Path: typedMap
+                        Args:
+                          Statements:
+                            - Type:
+                                Ident:
+                                  Path: anyGoMap
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: StringMap
+        Type:
+          IdentWithArgs:
+            Type:
+              Path: Map
+            Args:
+              Statements:
+                - Type:
+                    IdentWithType:
+                      Ident:
+                        Path: K
+                      Type:
+                        Ident:
+                          Path: string
+                - Type:
+                    IdentWithType:
+                      Ident:
+                        Path: V
+                      Type:
+                        Ident:
+                          Path: int
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: StringMap
+        Type:
+          IdentWithArgs:
+            Type:
+              Path: HashMap
+            Args:
+              Statements:
+                - Type:
+                    IdentWithType:
+                      Ident:
+                        Path: K
+                      Type:
+                        Ident:
+                          Path: string
+                - Type:
+                    IdentWithType:
+                      Ident:
+                        Path: V
+                      Type:
+                        Ident:
+                          Path: int
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Person
+        Type:
+          Struct:
+            Statements:
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: Name
+                    Type:
+                      Ident:
+                        Path: string
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: Iq
+                    Type:
+                      Ident:
+                        Path: float64
+              - Type:
+                  IdentWithType:
+                    Ident:
+                      Path: Age
+                    Type:
+                      Ident:
+                        Path: int64
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Student
+        Type:
+          Ident:
+            Path: Person
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Bob
+        Type:
+          IdentWithType:
+            Ident:
+              Path: Student
+            Type:
+              Struct:
+                Statements:
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: Name
+                        Type:
+                          Const:
+                            String: Bob
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: Age
+                        Type:
+                          Const:
+                            Rational: "10"
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: Iq
+                        Type:
+                          Const:
+                            Rational: 67/5
+                  - Type:
+                      IdentWithType:
+                        Ident:
+                          Path: Progress
+                        Type:
+                          Const:
+                            Rational: 1/3
+*/
+
+
+/*/lang:yaml test:ast.NodeList/
+- Ident: go-std
+- Ident: Map
+  Type:
+    Args:
+      - Ident: K
+        Type:
+          Ident: interface
+      - Ident: V
+        Type:
+          Ident: interface
+    Ident: interface
     Struct:
-      - Name: Name
-        Type: string
-      - Name: Iq
-        Type: float64
-      - Name: Age
-        Type: int64
-  - Name: Student
-    Type: Person
-  - Name: Bob
-    Type: Student
+      - Ident: Get
+        Type:
+          Ident: func
+          Type:
+            Args:
+              - Ident: k
+                Type:
+                  Ident: K
+            Ident: V
+            Type:
+              Struct: null
+      - Ident: Set
+        Type:
+          Args:
+            - Ident: k
+              Type:
+                Ident: K
+            - Ident: v
+              Type:
+                Ident: V
+          Ident: func
+          Struct: null
+- Ident: HashMap
+  Type:
+    Args:
+      - Ident: K
+        Type:
+          Ident: interface
+      - Ident: V
+        Type:
+          Ident: interface
     Struct:
-      - Name: Name
-        String: Bob
-      - Name: Age
-        Number: "10"
-      - Name: Iq
-        Number: 67/5
-      - Name: Progress
-        Number: 1/3
+      - Ident: typedMap
+        Type:
+          Args:
+            - Type:
+                Ident: K
+            - Type:
+                Ident: V
+          Ident: Map
+      - Ident: anyGoMap
+        Type:
+          Ident: go-std.Map
+          Struct: null
+      - Ident: return
+        Type:
+          Args:
+            - Type:
+                Ident: anyGoMap
+          Ident: typedMap
+- Ident: StringMap
+  Type:
+    Args:
+      - Ident: K
+        Type:
+          Ident: string
+      - Ident: V
+        Type:
+          Ident: int
+    Ident: Map
+- Ident: StringMap
+  Type:
+    Args:
+      - Ident: K
+        Type:
+          Ident: string
+      - Ident: V
+        Type:
+          Ident: int
+    Ident: HashMap
+- Ident: Person
+  Type:
+    Struct:
+      - Ident: Name
+        Type:
+          Ident: string
+      - Ident: Iq
+        Type:
+          Ident: float64
+      - Ident: Age
+        Type:
+          Ident: int64
+- Ident: Student
+  Type:
+    Ident: Person
+- Ident: Bob
+  Type:
+    Ident: Student
+    Struct:
+      - Ident: Name
+        Type:
+          String: Bob
+      - Ident: Age
+        Type:
+          Rational: "10"
+      - Ident: Iq
+        Type:
+          Rational: 67/5
+      - Ident: Progress
+        Type:
+          Rational: 1/3
+
 */

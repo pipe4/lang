@@ -14,12 +14,13 @@ var (
 			{Name: "Void", Pattern: `void`},
 			{Name: "Ident", Pattern: `[a-zA-Z][\w-.]*`},
 			{Name: "String", Pattern: `"[^"]*"`},
-			{Name: "Rat", Pattern: `\d+([./]\d+)?`},
+			{Name: "Rational", Pattern: `\d+([./]\d+)?`},
+			{Name: "EOS", Pattern: `[\n;]`},
 			{Name: "Punctuation", Pattern: `[-[!@#$%^&*()+_={}\|:;"'<,>.?/]|]`},
-			{Name: "Whitespace", Pattern: `[ \t\n\r]+`},
+			{Name: "Whitespace", Pattern: `[ \t]+`},
 		},
 		"BlockCommentStart": {
-			{Name: "BlockCommentEnd", Pattern: `\*/`, Action: lexer.Pop()},
+			{Name: "BlockCommentEnd", Pattern: `[*][/]`, Action: lexer.Pop()},
 			{Name: "BlockComment", Pattern: `[\s\S][^*]*`},
 		},
 		// 2

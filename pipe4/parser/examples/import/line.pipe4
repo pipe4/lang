@@ -3,6 +3,7 @@ import "github.com/pipe4/lang"
 
 /*/lang:yaml test:ast/
 Statements:
-- Import:
-  - Url: github.com/pipe4/lang
+  - SingleImport:
+      Import:
+        URL: github.com/pipe4/lang
 */

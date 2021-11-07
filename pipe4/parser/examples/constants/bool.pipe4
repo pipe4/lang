@@ -9,13 +9,31 @@ Person {
 
 /*/lang:yaml test:ast/
 Statements:
-- Name: bob
-  Bool: true
-- Name: not
-  Bool: false
-- Name: Person
-  Struct:
-  - Name: Missing
-    Default:
-      Bool: true
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: bob
+        Type:
+          Const:
+            Bool: true
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: not
+        Type:
+          Const:
+            Bool: false
+  - Type:
+      IdentWithType:
+        Ident:
+          Path: Person
+        Type:
+          Struct:
+            Statements:
+              - Type:
+                  Ident:
+                    Path: Missing
+                Default:
+                  Const:
+                    Bool: true
 */
