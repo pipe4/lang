@@ -12,7 +12,6 @@ import (
 
 	"github.com/pipe4/lang/pipe4/parser"
 	"github.com/urfave/cli/v2"
-	"gopkg.in/yaml.v3"
 )
 
 var ParserCommand = &cli.Command{
@@ -49,12 +48,11 @@ var ParserAstCommand = &cli.Command{
 			return fmt.Errorf("failed parse file %v: %w", fileName, err)
 		}
 
-		// pretty.Fprintf(os.Stdout, "%# v", ast)
-		encoder := yaml.NewEncoder(os.Stdout)
-		encoder.SetIndent(2)
-		if err := encoder.Encode(ast); err != nil {
+		yamlStr, err := ast.ToYaml()
+		if err != nil {
 			return fmt.Errorf("failed print ast tree: %w", err)
 		}
+		fmt.Print(yamlStr)
 		return nil
 	},
 }
