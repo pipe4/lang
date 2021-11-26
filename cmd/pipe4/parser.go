@@ -48,11 +48,11 @@ var ParserAstCommand = &cli.Command{
 			return fmt.Errorf("failed parse file %v: %w", fileName, err)
 		}
 
-		if yamlStr, err := ast.ToYaml(); err != nil {
+		yamlStr, err := ast.ToYaml()
+		if err != nil {
 			return fmt.Errorf("failed print ast tree: %w", err)
-		} else {
-			fmt.Print(yamlStr)
 		}
+		fmt.Print(yamlStr)
 		return nil
 	},
 }
