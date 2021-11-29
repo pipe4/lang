@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -16,23 +17,24 @@ import (
 )
 
 func testLexer(t *testing.T, path string) {
-	t.Run("lexer", func(t *testing.T) {
-		tokens, err := LexFile(path)
-		if err != nil {
-			assert.NoError(t, err, "error while lexing file")
-			return
-		}
+	if runtime.GOOS == "windows" {
+		t.Skipf("\\r not works on windows")
+	}
+	tokens, err := LexFile(path)
+	if err != nil {
+		assert.NoError(t, err, "error while lexing file")
+		return
+	}
 
-		names := make(map[lexer.TokenType]string)
-		for k, v := range Lexer().Symbols() {
-			names[v] = k
-		}
-		t.Logf("tokens:\n")
-		for _, token := range tokens {
-			fmt.Printf("====== %v ======\n%v\n", names[token.Type], token.String())
-		}
-		t.Logf("\n")
-	})
+	names := make(map[lexer.TokenType]string)
+	for k, v := range Lexer().Symbols() {
+		names[v] = k
+	}
+	t.Logf("tokens:\n")
+	for _, token := range tokens {
+		fmt.Printf("====== %v ======\n%v\n", names[token.Type], token.String())
+	}
+	t.Logf("\n")
 }
 
 func testParseFile(t *testing.T, path string) (ast *File) {
@@ -135,8 +137,11 @@ func testFromYamlNodeList(t *testing.T, name string, yamlAst string) (out ast.No
 	return
 }
 func testAst(t *testing.T, path string) {
+	path = strings.ReplaceAll(path, "\\", "/")
 	t.Run(path, func(t *testing.T) {
-		testLexer(t, path)
+		t.Run("lexer", func(t *testing.T) {
+			testLexer(t, path)
+		})
 		got := testParseFile(t, path)
 		if got == nil {
 			return
@@ -184,7 +189,7 @@ func testAst(t *testing.T, path string) {
 }
 
 func TestExamplesAst(t *testing.T) {
-	err := filepath.Walk("./examples",
+	err := filepath.Walk("examples",
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
