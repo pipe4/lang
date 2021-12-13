@@ -9,10 +9,12 @@ import (
 
 func main() {
 	app := &cli.App{
-		Name:  "pipe4",
-		Usage: "pipe4 lang cli tool",
+		Name:                 "pipe4",
+		Usage:                "pipe4 lang cli tool",
+		EnableBashCompletion: true,
 		Commands: []*cli.Command{
 			ParserCommand,
+			CompletionCommand,
 		},
 	}
 
