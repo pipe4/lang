@@ -47,8 +47,11 @@ var ParserAstCommand = &cli.Command{
 		if err != nil {
 			return fmt.Errorf("failed parse file %v: %w", fileName, err)
 		}
-
-		yamlStr, err := ast.ToYaml()
+		nodeList, err := ast.Statements.AstNode()
+		if err != nil {
+			return fmt.Errorf("failed convert parser ast to pipe4 ast: %w", err)
+		}
+		yamlStr, err := nodeList.ToYaml()
 		if err != nil {
 			return fmt.Errorf("failed print ast tree: %w", err)
 		}

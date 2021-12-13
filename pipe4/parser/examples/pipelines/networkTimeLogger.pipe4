@@ -1,0 +1,30 @@
+
+Wrap transformer {
+
+}
+
+
+netServicePipeline {
+    inStart     interface net.ServerRequest
+    outStart  interface net.ClientRequest
+    outEnd    outStart.Response.Closed
+    inEnd       inStart.Response.Closed
+
+   graph match {
+       isStart
+   }
+}
+
+serviceOwnTimeLogger reaction(item netServicePipeline) {
+
+}
+
+error oneof {
+	A
+	B
+	C
+}
+
+error ui.Color red
+
+parent inversOf child
