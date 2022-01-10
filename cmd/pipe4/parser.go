@@ -58,6 +58,14 @@ var ParserAstCommand = &cli.Command{
 		fmt.Print(yamlStr)
 		return nil
 	},
+	BashComplete: func(c *cli.Context) {
+		if c.NArg() > 0 {
+			fmt.Println(c.Args().Slice())
+			completePipe4(c.Args().Get(c.NArg() - 1))
+			return
+		}
+		completePipe4("")
+	},
 }
 
 var ParserRailroadCommand = &cli.Command{
