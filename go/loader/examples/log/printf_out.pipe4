@@ -1,0 +1,3 @@
+import "lang/go"
+
+Printf go.func(format string, v array(go.any)) {}

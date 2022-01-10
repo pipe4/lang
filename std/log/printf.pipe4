@@ -1,0 +1,7 @@
+import (
+	"lang/go/log"
+)
+
+Print unit(message string) {
+	log.Println(message)
+}

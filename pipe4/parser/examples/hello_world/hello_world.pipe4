@@ -1,0 +1,12 @@
+import (
+	"lang/go/log"
+)
+
+printHello unit {
+	StdPrint(message "hello, world!")
+}
+
+
+StdPrint unit(message string) {
+	log.Println(message)
+}
