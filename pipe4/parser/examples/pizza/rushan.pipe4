@@ -1,0 +1,1574 @@
+https://www.w3.org/TR/owl2-manchester-syntax/
+
+ObjectProperty: hasSpiciness
+
+    Annotations:
+        rdfs:comment "A property created to be used with the ValuePartition - Spiciness."@en
+
+    Characteristics:
+        Functional
+
+    Range:
+        Spiciness
+
+
+ObjectProperty: hasBase
+
+    SubPropertyOf:
+        hasIngredient
+
+    Characteristics:
+        InverseFunctional,
+        Functional
+
+    Domain:
+        Pizza
+
+    Range:
+        PizzaBase
+
+    InverseOf:
+        isBaseOf
+
+
+ObjectProperty: hasTopping
+
+    Annotations:
+        rdfs:comment "Note that hasTopping is inverse functional because isToppingOf is functional"@en
+
+    SubPropertyOf:
+        hasIngredient
+
+    Characteristics:
+        InverseFunctional
+
+    Domain:
+        Pizza
+
+    Range:
+        PizzaTopping
+
+    InverseOf:
+        isToppingOf
+
+
+ObjectProperty: hasIngredient
+
+    Annotations:
+        rdfs:comment "NB Transitive - the ingredients of ingredients are ingredients of the whole"@en
+
+    Characteristics:
+        Transitive
+
+    Domain:
+        Food
+
+    Range:
+        Food
+
+    InverseOf:
+        isIngredientOf
+
+
+ObjectProperty: isBaseOf
+
+    SubPropertyOf:
+        isIngredientOf
+
+    Characteristics:
+        InverseFunctional,
+        Functional
+
+    InverseOf:
+        hasBase
+
+
+ObjectProperty: isIngredientOf
+
+    Annotations:
+        rdfs:comment "The inverse property tree to hasIngredient - all subproperties and attributes of the properties should reflect those under hasIngredient."@en
+
+    Characteristics:
+        Transitive
+
+    InverseOf:
+        hasIngredient
+
+
+ObjectProperty: isToppingOf
+
+    Annotations:
+        rdfs:comment "Any given instance of topping should only be added to a single pizza (no cheap half-measures on our pizzas)"@en
+
+    SubPropertyOf:
+        isIngredientOf
+
+    Characteristics:
+        Functional
+
+    InverseOf:
+        hasTopping
+
+
+ObjectProperty: hasCountryOfOrigin
+
+
+Class: Mushroom
+
+    Annotations:
+        rdfs:label "Cogumelo"@pt,
+        skos:altLabel "Mushroom Pizza"@en,
+        skos:altLabel "Mushroom"@en,
+        skos:prefLabel "Mushroom"@en,
+        rdfs:label "Mushroom"@en
+
+    SubClassOf:
+        hasTopping only
+            ((MozzarellaTopping or MushroomTopping or TomatoTopping)),
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some MushroomTopping,
+        hasTopping some MozzarellaTopping
+
+
+Class: Pizza
+
+    Annotations:
+        rdfs:seeAlso <https://en.wikipedia.org/wiki/Pizza>,
+        skos:prefLabel "Pizza"@en,
+        rdfs:label "Pizza"@en
+
+    SubClassOf:
+        Food,
+        hasBase some PizzaBase
+
+
+Class: SloppyGiuseppe
+
+    Annotations:
+        rdfs:label "SloppyGiuseppe"@pt,
+        rdfs:label "SloppyGiuseppe"@en,
+        skos:prefLabel "Sloppy Giuseppe"@en,
+        skos:altLabel "Sloppy Giuseppe"@en,
+        skos:altLabel "Sloppy Giuseppe Pizza"@en
+
+    SubClassOf:
+        hasTopping some HotSpicedBeefTopping,
+        hasTopping some TomatoTopping,
+		NamedPizza,
+		hasTopping some OnionTopping,
+		hasTopping some GreenPepperTopping,
+		hasTopping some MozzarellaTopping
+		hasTopping only
+					((GreenPepperTopping or HotSpicedBeefTopping or MozzarellaTopping or OnionTopping or TomatoTopping)),
+
+
+
+Class: VegetarianPizzaEquivalent1
+
+    Annotations:
+        rdfs:comment "Any pizza that only has vegetarian toppings or no toppings is a VegetarianPizzaEquiv1. Should be inferred to be equivalent to VegetarianPizzaEquiv2.  Not equivalent to VegetarianPizza because PizzaTopping is not covering"@en,
+        rdfs:label "VegetarianPizza1"@en,
+        rdfs:label "PizzaVegetarianaEquivalente1"@pt,
+        skos:prefLabel "Vegetarian Pizza1"@en
+
+    EquivalentTo:
+        Pizza
+         and (hasTopping only VegetarianTopping)
+
+
+Class: VegetarianPizzaEquivalent2
+
+    Annotations:
+        rdfs:comment "An alternative to VegetarianPizzaEquiv1 that does not require a definition of VegetarianTopping. Perhaps more difficult to maintain. Not equivalent to VegetarianPizza"@en,
+        skos:prefLabel "Vegetarian Pizza2"@en,
+        rdfs:label "PizzaVegetarianaEquivalente2"@pt,
+        rdfs:label "VegetarianPizza2"@en
+
+    EquivalentTo:
+        Pizza
+         and (hasTopping only
+            ((CheeseTopping or FruitTopping or HerbSpiceTopping or NutTopping or SauceTopping or VegetableTopping)))
+
+
+Class: GarlicTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeAlho"@pt,
+        rdfs:label "GarlicTopping"@en,
+        skos:prefLabel "Garlic"@en
+
+    SubClassOf:
+        hasSpiciness some Medium,
+        VegetableTopping
+
+
+Class: HotSpicedBeefTopping
+
+    Annotations:
+        rdfs:label "HotSpicedBeefTopping"@en,
+        skos:prefLabel "Hot Spiced Beef"@en,
+        rdfs:label "CoberturaDeBifePicante"@pt
+
+    SubClassOf:
+        hasSpiciness some Hot,
+        MeatTopping
+
+
+Class: Parmense
+
+    Annotations:
+        skos:altLabel "Parmese"@en,
+        skos:prefLabel "Parmense"@en,
+        rdfs:label "Parmense"@pt,
+        skos:altLabel "Parmese Pizza"@en,
+        rdfs:label "Parmense"@en
+
+    SubClassOf:
+        hasTopping some TomatoTopping,
+        hasTopping some ParmesanTopping,
+        NamedPizza,
+        hasTopping only
+            ((AsparagusTopping or HamTopping or MozzarellaTopping or ParmesanTopping or TomatoTopping)),
+        hasTopping some HamTopping,
+        hasTopping some AsparagusTopping,
+        hasTopping some MozzarellaTopping
+
+
+Class: SultanaTopping
+
+    Annotations:
+        rdfs:label "CoberturaSultana"@pt,
+        skos:prefLabel "Sultana"@en,
+        rdfs:label "SultanaTopping"@en
+
+    SubClassOf:
+        FruitTopping,
+        hasSpiciness some Medium
+
+
+Class: SpicyTopping
+
+    Annotations:
+        rdfs:label "CoberturaTemperada"@pt,
+        skos:prefLabel "Spicy"@en,
+        rdfs:label "SpicyTopping"@en,
+        skos:definition "Any pizza topping that has spiciness Hot"@en
+
+    EquivalentTo:
+        PizzaTopping
+         and (hasSpiciness some Hot)
+
+
+Class: ThinAndCrispyBase
+
+    Annotations:
+        skos:prefLabel "Thin And Crispy Base"@en,
+        rdfs:label "ThinAndCrispyBase"@en,
+        rdfs:label "BaseFinaEQuebradica"@pt
+
+    SubClassOf:
+        PizzaBase
+
+    DisjointWith:
+        DeepPanBase
+
+
+Class: RosemaryTopping
+
+    Annotations:
+        rdfs:label "CoberturaRosemary"@pt,
+        skos:prefLabel "Rosemary"@en,
+        rdfs:label "RosemaryTopping"@en
+
+    SubClassOf:
+        HerbSpiceTopping,
+        hasSpiciness some Mild
+
+    DisjointWith:
+        CajunSpiceTopping
+
+
+Class: MozzarellaTopping
+
+    Annotations:
+        rdfs:label "MozzarellaTopping"@en,
+        skos:prefLabel "Mozzarella"@en,
+        rdfs:label "CoberturaDeMozzarella"@pt
+
+    SubClassOf:
+        CheeseTopping,
+        hasCountryOfOrigin value Italy,
+        hasSpiciness some Mild
+
+
+Class: InterestingPizza
+
+    Annotations:
+        rdfs:label "InterestingPizza"@en,
+        rdfs:label "PizzaInteressante"@pt,
+        skos:definition "Any pizza that has at least 3 toppings. Note that this is a cardinality constraint on the hasTopping property and NOT a qualified cardinality constraint (QCR). A QCR would specify from which class the members in this relationship must be. eg has at least 3 toppings from PizzaTopping. This is currently not supported in OWL."@en,
+        skos:prefLabel "Interesting Pizza"@en
+
+    EquivalentTo:
+        Pizza
+         and (hasTopping min 3 owl:Thing)
+
+
+Class: JalapenoPepperTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeJalapeno"@pt,
+        rdfs:label "JalapenoPepperTopping"@en,
+        skos:prefLabel "Jalapeno Pepper"@en
+
+    SubClassOf:
+        PepperTopping,
+        hasSpiciness some Hot
+
+
+Class: Soho
+
+    Annotations:
+        skos:prefLabel "Soho"@en,
+        rdfs:label "Soho"@pt,
+        skos:altLabel "Soho"@en,
+        rdfs:label "Soho"@en,
+        skos:altLabel "Soho Pizza"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping some RocketTopping,
+        hasTopping some TomatoTopping,
+        hasTopping some ParmesanTopping,
+        hasTopping some GarlicTopping,
+        NamedPizza,
+        hasTopping only
+            ((GarlicTopping or MozzarellaTopping or OliveTopping or ParmesanTopping or RocketTopping or TomatoTopping)),
+        hasTopping some MozzarellaTopping
+
+
+Class: Rosa
+
+    Annotations:
+        skos:altLabel "Rosa Pizza"@en,
+        skos:prefLabel "Rosa"@en,
+        rdfs:label "Rosa"@pt,
+        skos:altLabel "Rosa"@en,
+        rdfs:label "Rosa"@en
+
+    SubClassOf:
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some GorgonzolaTopping,
+        hasTopping only
+            ((GorgonzolaTopping or MozzarellaTopping or TomatoTopping)),
+        hasTopping some MozzarellaTopping
+
+
+Class: MixedSeafoodTopping
+
+    Annotations:
+        skos:prefLabel "Mixed Seafood"@en,
+        rdfs:label "MixedSeafoodTopping"@en,
+        rdfs:label "CoberturaDeFrutosDoMarMistos"@pt
+
+    SubClassOf:
+        FishTopping
+
+
+Class: GreenPepperTopping
+
+    Annotations:
+        rdfs:label "CoberturaDePimentaoVerde"@pt,
+        skos:prefLabel "Green Pepper"@en,
+        rdfs:label "GreenPepperTopping"@en
+
+    SubClassOf:
+        PepperTopping
+
+
+Class: owl:Thing
+
+
+Class: PetitPoisTopping
+
+    Annotations:
+        rdfs:label "CoberturaPetitPois"@pt,
+        rdfs:label "PetitPoisTopping"@en,
+        skos:prefLabel "Petit Pois"@en
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: LaReine
+
+    Annotations:
+        rdfs:label "LaReine"@pt,
+        rdfs:label "LaReine"@en,
+        skos:altLabel "La Reine"@en,
+        skos:altLabel "La Reine Pizza"@en,
+        skos:prefLabel "La Reine"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping only
+            ((HamTopping or MozzarellaTopping or MushroomTopping or OliveTopping or TomatoTopping)),
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some HamTopping,
+        hasTopping some MushroomTopping,
+        hasTopping some MozzarellaTopping
+
+
+Class: Napoletana
+
+    Annotations:
+        skos:altLabel "Napoletana"@en,
+        rdfs:label "Napoletana"@pt,
+        skos:altLabel "Napoletana Pizza"@en,
+        rdfs:label "Napoletana"@en,
+        skos:prefLabel "Napoletana"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping only
+            ((AnchoviesTopping or CaperTopping or MozzarellaTopping or OliveTopping or TomatoTopping)),
+        hasTopping some TomatoTopping,
+        hasTopping some AnchoviesTopping,
+        NamedPizza,
+        hasTopping some CaperTopping,
+        hasCountryOfOrigin value Italy,
+        hasTopping some MozzarellaTopping
+
+
+Class: DomainConcept
+
+    Annotations:
+        skos:prefLabel "Domain Thing"@en,
+        rdfs:label "DomainThing"@en
+
+    DisjointWith:
+        ValuePartition
+
+
+Class: Giardiniera
+
+    Annotations:
+        rdfs:label "Giardiniera"@en,
+        skos:prefLabel "Giardiniera"@en,
+        skos:altLabel "Giardiniera"@en,
+        rdfs:label "Giardiniera"@pt,
+        skos:altLabel "Giardiniera Pizza"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping some TomatoTopping,
+        hasTopping some PeperonataTopping,
+        NamedPizza,
+        hasTopping some SlicedTomatoTopping,
+        hasTopping some PetitPoisTopping,
+        hasTopping some LeekTopping,
+        hasTopping only
+            ((LeekTopping or MozzarellaTopping or MushroomTopping or OliveTopping or PeperonataTopping or PetitPoisTopping or SlicedTomatoTopping or TomatoTopping)),
+        hasTopping some MushroomTopping,
+        hasTopping some MozzarellaTopping
+
+
+Class: PrawnsTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeCamarao"@pt,
+        skos:prefLabel "Prawns"@en,
+        rdfs:label "PrawnsTopping"@en
+
+    SubClassOf:
+        FishTopping
+
+
+Class: FourSeasons
+
+    Annotations:
+        skos:altLabel "Four Seasons Pizza"@en,
+        skos:altLabel "Four Seasons"@en,
+        rdfs:label "FourSeasons"@en,
+        rdfs:label "QuatroQueijos"@pt,
+        skos:prefLabel "Four Seasons"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping some TomatoTopping,
+        hasTopping some AnchoviesTopping,
+        NamedPizza,
+        hasTopping some PeperoniSausageTopping,
+        hasTopping some CaperTopping,
+        hasTopping only
+            ((AnchoviesTopping or CaperTopping or MozzarellaTopping or MushroomTopping or OliveTopping or PeperoniSausageTopping or TomatoTopping)),
+        hasTopping some MushroomTopping,
+        hasTopping some MozzarellaTopping
+
+
+Class: Mild
+
+    Annotations:
+        rdfs:label "NaoPicante"@pt,
+        rdfs:label "Mild"@en,
+        skos:prefLabel "Mild"@en
+
+    SubClassOf:
+        Spiciness
+
+
+Class: RocketTopping
+
+    Annotations:
+        skos:prefLabel "Rocket"@en,
+        rdfs:label "RocketTopping"@en,
+        rdfs:label "CoberturaRocket"@pt
+
+    SubClassOf:
+        hasSpiciness some Medium,
+        VegetableTopping
+
+
+Class: FourCheesesTopping
+
+    Annotations:
+        skos:prefLabel "Four Cheeses"@en,
+        rdfs:label "FourCheesesTopping"@en,
+        rdfs:label "CoberturaQuatroQueijos"@pt
+
+    SubClassOf:
+        CheeseTopping,
+        hasSpiciness some Mild
+
+
+Class: Veneziana
+
+    Annotations:
+        skos:prefLabel "Veneziana"@en,
+        skos:altLabel "Veneziana Pizza"@en,
+        skos:altLabel "Veneziana"@en,
+        rdfs:label "Veneziana"@en,
+        rdfs:label "Veneziana"@pt
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping some TomatoTopping,
+        hasTopping some PineKernels,
+        NamedPizza,
+        hasTopping some OnionTopping,
+        hasTopping some CaperTopping,
+        hasTopping only
+            ((CaperTopping or MozzarellaTopping or OliveTopping or OnionTopping or PineKernels or SultanaTopping or TomatoTopping)),
+        hasCountryOfOrigin value Italy,
+        hasTopping some SultanaTopping,
+        hasTopping some MozzarellaTopping
+
+
+Class: American
+
+    Annotations:
+        skos:altLabel "American Pizza"@en,
+        skos:altLabel "American"@en,
+        rdfs:label "American"@en,
+        skos:prefLabel "American"@en,
+        rdfs:label "Americana"@pt
+
+    SubClassOf:
+        hasTopping some TomatoTopping,
+        hasTopping only
+            ((MozzarellaTopping or PeperoniSausageTopping or TomatoTopping)),
+        NamedPizza,
+        hasTopping some PeperoniSausageTopping,
+        hasCountryOfOrigin value America,
+        hasTopping some MozzarellaTopping
+
+
+Class: FruttiDiMare
+
+    Annotations:
+        skos:prefLabel "Frutti Di Mare"@en,
+        skos:altLabel "Frutti Di Mare"@en,
+        rdfs:label "FrutosDoMar"@pt,
+        skos:altLabel "Frutti Di Mare Pizza"@en,
+        rdfs:label "FruttiDiMare"@en
+
+    SubClassOf:
+        hasTopping some MixedSeafoodTopping,
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some GarlicTopping,
+        hasTopping only
+            ((GarlicTopping or MixedSeafoodTopping or TomatoTopping))
+
+
+Class: OliveTopping
+
+    Annotations:
+        skos:prefLabel "Olive"@en,
+        rdfs:label "CoberturaDeAzeitona"@pt,
+        rdfs:label "OliveTopping"@en
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: RedOnionTopping
+
+    Annotations:
+        rdfs:label "RedOnionTopping"@en,
+        skos:prefLabel "Red Onion"@en,
+        rdfs:label "CoberturaDeCebolaVermelha"@pt
+
+    SubClassOf:
+        OnionTopping
+
+
+Class: VegetarianTopping
+
+    Annotations:
+        rdfs:comment "An example of a covering axiom. VegetarianTopping is equivalent to the union of all toppings in the given axiom. VegetarianToppings can only be Cheese or Vegetable or....etc."@en,
+        rdfs:label "CoberturaVegetariana"@pt,
+        rdfs:label "VegetarianTopping"@en,
+        skos:prefLabel "Vegetarian Topping"@en
+
+    EquivalentTo:
+        PizzaTopping
+         and ((CheeseTopping or FruitTopping or HerbSpiceTopping or NutTopping or SauceTopping or VegetableTopping))
+
+
+Class: CaperTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeCaper"@pt,
+        rdfs:label "CaperTopping"@en,
+        skos:prefLabel "Caper"@en
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: HamTopping
+
+    Annotations:
+        skos:prefLabel "Ham"@en,
+        rdfs:label "HamTopping"@en,
+        rdfs:label "CoberturaDePresunto"@pt
+
+    SubClassOf:
+        MeatTopping
+
+
+Class: PizzaBase
+
+    Annotations:
+        skos:prefLabel "Pizza Base"@en,
+        rdfs:label "BaseDaPizza"@pt,
+        rdfs:label "PizzaBase"@en
+
+    SubClassOf:
+        Food
+
+
+Class: SweetPepperTopping
+
+    Annotations:
+        rdfs:label "SweetPepperTopping"@en,
+        skos:prefLabel "Sweet Pepper"@en,
+        rdfs:label "CoberturaDePimentaoDoce"@pt
+
+    SubClassOf:
+        PepperTopping,
+        hasSpiciness some Mild
+
+
+Class: UnclosedPizza
+
+    Annotations:
+        rdfs:comment "An unclosed Pizza cannot be inferred to be either a VegetarianPizza or a NonVegetarianPizza, because it might have other toppings."^^xsd:string,
+        rdfs:label "UnclosedPizza"@en,
+        skos:prefLabel "Unclosed Pizza"@en,
+        rdfs:label "PizzaAberta"@pt
+
+    SubClassOf:
+        Pizza,
+        hasTopping some MozzarellaTopping
+
+
+Class: ParmaHamTopping
+
+    Annotations:
+        skos:prefLabel "Parma Ham"@en,
+        rdfs:label "ParmaHamTopping"@en,
+        rdfs:label "CoberturaDePrezuntoParma"@pt
+
+    SubClassOf:
+        HamTopping,
+        hasSpiciness some Mild
+
+
+Class: CheeseyVegetableTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeQueijoComVegetais"@pt,
+        rdfs:label "CheesyVegetableTopping"@en,
+        rdfs:comment "This class will be unsatisfiable. This is because we have given it 2 disjoint parents, which means it could never have any instances (as nothing can be both a CheeseTopping and a VegetableTopping). NB Called ProbeInconsistentTopping in the ProtegeOWL Tutorial."@en
+
+    SubClassOf:
+        CheeseTopping,
+        VegetableTopping
+
+
+Class: CheeseTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeQueijo"@pt,
+        rdfs:label "CheeseTopping"@en,
+        skos:prefLabel "Cheese"@en
+
+    SubClassOf:
+        PizzaTopping
+
+
+Class: Hot
+
+    Annotations:
+        rdfs:label "Hot"@en,
+        rdfs:label "Picante"@pt,
+        skos:prefLabel "Hot"@en
+
+    SubClassOf:
+        Spiciness
+
+
+Class: SauceTopping
+
+    Annotations:
+        skos:prefLabel "Sauce"@en,
+        rdfs:label "CoberturaEmMolho"@pt,
+        rdfs:label "SauceTopping"@en
+
+    SubClassOf:
+        PizzaTopping
+
+
+Class: Siciliana
+
+    Annotations:
+        skos:altLabel "Siciliana Pizza"@en,
+        rdfs:label "Siciliana"@en,
+        rdfs:label "Siciliana"@pt,
+        skos:altLabel "Siciliana"@en,
+        skos:prefLabel "Siciliana"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping some ArtichokeTopping,
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some GarlicTopping,
+        hasTopping some AnchoviesTopping,
+        hasTopping some HamTopping,
+        hasTopping some MozzarellaTopping,
+        hasTopping only
+            ((AnchoviesTopping or ArtichokeTopping or GarlicTopping or HamTopping or MozzarellaTopping or OliveTopping or TomatoTopping))
+
+
+Class: Caprina
+
+    Annotations:
+        skos:altLabel "Caprina"@en,
+        skos:altLabel "Caprina Pizza"@en,
+        rdfs:label "Caprina"@en,
+        skos:prefLabel "Caprina"@en,
+        rdfs:label "Caprina"@pt
+
+    SubClassOf:
+        hasTopping some SundriedTomatoTopping,
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some GoatsCheeseTopping,
+        hasTopping only
+            ((GoatsCheeseTopping or MozzarellaTopping or SundriedTomatoTopping or TomatoTopping)),
+        hasTopping some MozzarellaTopping
+
+
+Class: OnionTopping
+
+    Annotations:
+        skos:prefLabel "Onion"@en,
+        rdfs:label "CoberturaDeCebola"@pt,
+        rdfs:label "OnionTopping"@en
+
+    SubClassOf:
+        hasSpiciness some Medium,
+        VegetableTopping
+
+
+Class: SundriedTomatoTopping
+
+    Annotations:
+        rdfs:label "SundriedTomatoTopping"@en,
+        rdfs:label "CoberturaDeTomateRessecadoAoSol"@pt,
+        skos:prefLabel "Sundried Tomato"@en
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        TomatoTopping
+
+    DisjointWith:
+        SlicedTomatoTopping
+
+
+Class: MushroomTopping
+
+    Annotations:
+        rdfs:label "MushroomTopping"@en,
+        skos:prefLabel "Mushroom"@en,
+        rdfs:label "CoberturaDeCogumelo"@pt
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: HotGreenPepperTopping
+
+    Annotations:
+        rdfs:label "HotGreenPepperTopping"@en,
+        skos:prefLabel "Hot Green Pepper"@en,
+        rdfs:label "CoberturaDePimentaoVerdePicante"@pt
+
+    SubClassOf:
+        hasSpiciness some Hot,
+        GreenPepperTopping
+
+
+Class: NutTopping
+
+    Annotations:
+        rdfs:label "NutTopping"@en,
+        skos:prefLabel "Nut"@en,
+        rdfs:label "CoberturaDeCastanha"@pt
+
+    SubClassOf:
+        PizzaTopping,
+        hasSpiciness some Mild
+
+
+Class: MeatyPizza
+
+    Annotations:
+        skos:definition "Any pizza that has at least one meat topping"@en,
+        rdfs:label "PizzaDeCarne"@pt,
+        rdfs:label "MeatyPizza"@en,
+        skos:prefLabel "Meaty Pizza"@en
+
+    EquivalentTo:
+        Pizza
+         and (hasTopping some MeatTopping)
+
+
+Class: PolloAdAstra
+
+    Annotations:
+        rdfs:label "PolloAdAstra"@en,
+        rdfs:label "PolloAdAstra"@pt,
+        skos:prefLabel "Pollo Ad Astra"@en,
+        skos:altLabel "Pollo Ad Astra Pizza"@en,
+        skos:altLabel "Pollo Ad Astra"@en
+
+    SubClassOf:
+        hasTopping some ChickenTopping,
+        hasTopping some CajunSpiceTopping,
+        hasTopping some TomatoTopping,
+        hasTopping only
+            ((CajunSpiceTopping or ChickenTopping or GarlicTopping or MozzarellaTopping or RedOnionTopping or SweetPepperTopping or TomatoTopping)),
+        hasTopping some GarlicTopping,
+        NamedPizza,
+        hasTopping some SweetPepperTopping,
+        hasTopping some RedOnionTopping,
+        hasTopping some MozzarellaTopping
+
+
+Class: ThinAndCrispyPizza
+
+    Annotations:
+        rdfs:label "ThinAndCrispyPizza"@en,
+        skos:prefLabel "Thin And Crispy Pizza"@en
+
+    EquivalentTo:
+        Pizza
+         and (hasBase only ThinAndCrispyBase)
+
+
+Class: Capricciosa
+
+    Annotations:
+        skos:altLabel "Capricciosa Pizza"@en,
+        skos:prefLabel "Capricciosa"@en,
+        skos:altLabel "Capricciosa"@en,
+        rdfs:label "Capricciosa"@pt,
+        rdfs:label "Capricciosa"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping some PeperonataTopping,
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some AnchoviesTopping,
+        hasTopping some HamTopping,
+        hasTopping some CaperTopping,
+        hasTopping some MozzarellaTopping,
+        hasTopping only
+            ((AnchoviesTopping or CaperTopping or HamTopping or MozzarellaTopping or OliveTopping or PeperonataTopping or TomatoTopping))
+
+
+Class: PineKernels
+
+    Annotations:
+        rdfs:label "CoberturaPineKernels"@pt,
+        skos:prefLabel "Pine Kernel"@en,
+        rdfs:label "PineKernelTopping"@en
+
+    SubClassOf:
+        NutTopping
+
+
+Class: SpicyPizza
+
+    Annotations:
+        skos:definition "Any pizza that has a spicy topping is a SpicyPizza"@en,
+        rdfs:label "SpicyPizza"@en,
+        skos:prefLabel "Spicy Pizza"@en,
+        rdfs:label "PizzaTemperada"@pt
+
+    EquivalentTo:
+        Pizza
+         and (hasTopping some SpicyTopping)
+
+
+Class: FruitTopping
+
+    Annotations:
+        skos:prefLabel "Fruit"@en,
+        rdfs:label "FruitTopping"@en,
+        rdfs:label "CoberturaDeFrutas"@pt
+
+    SubClassOf:
+        PizzaTopping
+
+
+Class: Medium
+
+    Annotations:
+        skos:prefLabel "Medium"@en,
+        rdfs:label "Media"@pt,
+        rdfs:label "Medium"@en
+
+    SubClassOf:
+        Spiciness
+
+
+Class: AnchoviesTopping
+
+    Annotations:
+        skos:prefLabel "Anchovies"@en,
+        rdfs:label "AnchoviesTopping"@en,
+        rdfs:label "CoberturaDeAnchovies"@pt
+
+    SubClassOf:
+        FishTopping
+
+
+Class: ValuePartition
+
+    Annotations:
+        rdfs:comment "A ValuePartition is a pattern that describes a restricted set of classes from which a property can be associated. The parent class is used in restrictions, and the covering axiom means that only members of the subclasses may be used as values. The possible subclasses cannot be extended without updating the ValuePartition class."^^xsd:string,
+        skos:prefLabel "Value Partition"@en,
+        rdfs:label "ValorDaParticao"@pt,
+        rdfs:label "ValuePartition"@en
+
+    DisjointWith:
+        DomainConcept
+
+
+Class: SpinachTopping
+
+    Annotations:
+        rdfs:label "SpinachTopping"@en,
+        skos:prefLabel "Spinach"@en,
+        rdfs:label "CoberturaDeEspinafre"@pt
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: Fiorentina
+
+    Annotations:
+        rdfs:label "Fiorentina"@en,
+        rdfs:label "Fiorentina"@pt,
+        skos:altLabel "Fiorentina Pizza"@en,
+        skos:prefLabel "Fiorentina"@en,
+        skos:altLabel "Fiorentina"@en
+
+    SubClassOf:
+        hasTopping some OliveTopping,
+        hasTopping some ParmesanTopping,
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping some GarlicTopping,
+        hasTopping some SpinachTopping,
+        hasTopping some MozzarellaTopping,
+        hasTopping only
+            ((GarlicTopping or MozzarellaTopping or OliveTopping or ParmesanTopping or SpinachTopping or TomatoTopping))
+
+
+Class: PeperoniSausageTopping
+
+    Annotations:
+        rdfs:label "PeperoniSausageTopping"@en,
+        rdfs:label "CoberturaDeCalabreza"@pt,
+        skos:prefLabel "Peperoni Sausage"@en
+
+    SubClassOf:
+        hasSpiciness some Medium,
+        MeatTopping
+
+
+Class: TomatoTopping
+
+    Annotations:
+        skos:prefLabel "Tomato"@en,
+        rdfs:label "CoberturaDeTomate"@pt,
+        rdfs:label "TomatoTopping"@en
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: ChickenTopping
+
+    Annotations:
+        skos:prefLabel "Chicken"@en,
+        rdfs:label "CoberturaDeFrango"@pt,
+        rdfs:label "ChickenTopping"@en
+
+    SubClassOf:
+        MeatTopping,
+        hasSpiciness some Mild
+
+
+Class: Margherita
+
+    Annotations:
+        skos:altLabel "Margherita"@en,
+        skos:altLabel "Margherita Pizza"@en,
+        skos:prefLabel "Margherita"@en,
+        rdfs:label "Margherita"@en,
+        rdfs:label "Margherita"@pt
+
+    SubClassOf:
+        hasTopping some TomatoTopping,
+        NamedPizza,
+        hasTopping only
+            ((MozzarellaTopping or TomatoTopping)),
+        hasTopping some MozzarellaTopping
+
+
+Class: ParmesanTopping
+
+    Annotations:
+        skos:prefLabel "Parmezan"@en,
+        rdfs:label "ParmezanTopping"@en,
+        rdfs:label "CoberturaDeParmesao"@pt
+
+    SubClassOf:
+        CheeseTopping,
+        hasSpiciness some Mild
+
+
+Class: AmericanHot
+
+    Annotations:
+        skos:altLabel "American Hot"@en,
+        skos:altLabel "American Hot Pizza"@en,
+        rdfs:label "AmericanaPicante"@pt,
+        rdfs:label "AmericanHot"@en,
+        skos:prefLabel "American Hot"@en
+
+    SubClassOf:
+        hasTopping some TomatoTopping,
+        hasTopping some PeperoniSausageTopping,
+        NamedPizza,
+        hasCountryOfOrigin value America,
+        hasTopping some HotGreenPepperTopping,
+        hasTopping some JalapenoPepperTopping,
+        hasTopping only
+            ((HotGreenPepperTopping or JalapenoPepperTopping or MozzarellaTopping or PeperoniSausageTopping or TomatoTopping)),
+        hasTopping some MozzarellaTopping
+
+
+Class: MeatTopping
+
+    Annotations:
+        skos:prefLabel "Meat"@en,
+        rdfs:label "MeatTopping"@en,
+        rdfs:label "CoberturaDeCarne"@pt
+
+    SubClassOf:
+        PizzaTopping
+
+
+Class: VegetableTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeVegetais"@pt,
+        rdfs:label "VegetableTopping"@en,
+        skos:prefLabel "Vegetable Topping"@en
+
+    SubClassOf:
+        PizzaTopping
+
+
+Class: DeepPanBase
+
+    Annotations:
+        rdfs:label "BaseEspessa"@pt,
+        skos:prefLabel "Deep Pan Base"@en,
+        rdfs:label "DeepPanBase"@en
+
+    SubClassOf:
+        PizzaBase
+
+    DisjointWith:
+        ThinAndCrispyBase
+
+
+Class: NonVegetarianPizza
+
+    Annotations:
+        rdfs:label "PizzaNaoVegetariana"@pt,
+        rdfs:label "NonVegetarianPizza"@en,
+        skos:definition "Any Pizza that is not a VegetarianPizza"@en,
+        skos:prefLabel "Non Vegetarian Pizza"@en
+
+    EquivalentTo:
+        Pizza
+         and (not (VegetarianPizza))
+
+    DisjointWith:
+        VegetarianPizza
+
+
+Class: RealItalianPizza
+
+    Annotations:
+        skos:prefLabel "Real Italian Pizza"@en,
+        rdfs:label "PizzaItalianaReal"@pt,
+        skos:definition "Any Pizza that has the country of origin, Italy.  RealItalianPizzas must also only have ThinAndCrispy bases."@en,
+        rdfs:label "RealItalianPizza"@en
+
+    EquivalentTo:
+        Pizza
+         and (hasCountryOfOrigin value Italy)
+
+    SubClassOf:
+        hasBase only ThinAndCrispyBase
+
+
+Class: SpicyPizzaEquivalent
+
+    Annotations:
+        skos:prefLabel "Spicy Pizza Equivalent"@en,
+        rdfs:comment "An alternative definition for the SpicyPizza which does away with needing a definition of SpicyTopping and uses a slightly more complicated restriction: Pizzas that have at least one topping that is both a PizzaTopping and has spiciness hot are members of this class."@en,
+        rdfs:label "SpicyPizzaEquivalent"@en,
+        rdfs:label "PizzaTemperadaEquivalente"@pt
+
+    EquivalentTo:
+        Pizza
+         and (hasTopping some
+            (PizzaTopping
+             and (hasSpiciness some Hot)))
+
+
+Class: IceCream
+
+    Annotations:
+        skos:prefLabel "Ice Cream"@en,
+        rdfs:comment "A class to demonstrate mistakes made with setting a property domain. The property hasTopping has a domain of Pizza. This means that the reasoner can infer that all individuals using the hasTopping property must be of type Pizza. Because of the restriction on this class, all members of IceCream must use the hasTopping property, and therefore must also be members of Pizza. However, Pizza and IceCream are disjoint, so this causes an inconsistency. If they were not disjoint, IceCream would be inferred to be a subclass of Pizza."@en,
+        rdfs:label "IceCream"@en,
+        rdfs:label "Sorvete"@pt
+
+    SubClassOf:
+        hasTopping some FruitTopping,
+        Food
+
+
+Class: NamedPizza
+
+    Annotations:
+        rdfs:label "PizzaComUmNome"@pt,
+        rdfs:comment "A pizza that can be found on a pizza menu"@en
+
+    SubClassOf:
+        Pizza
+
+
+Class: ArtichokeTopping
+
+    Annotations:
+        skos:prefLabel "Artichoke"@en,
+        rdfs:label "ArtichokeTopping"@en,
+        rdfs:label "CoberturaDeArtichoke"@pt
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: Country
+
+    Annotations:
+        skos:prefLabel "Country"@en,
+        rdfs:label "Pais"@pt,
+        rdfs:label "Country"@en,
+        rdfs:comment "A class that is equivalent to the set of individuals that are described in the enumeration - ie Countries can only be either America, England, France, Germany or Italy and nothing else. Note that these individuals have been asserted to be allDifferent from each other."@en
+
+    EquivalentTo:
+        DomainConcept
+         and ({America , England , France , Germany , Italy})
+
+
+Class: CheeseyPizza
+
+    Annotations:
+        rdfs:label "CheesyPizza"@en,
+        rdfs:label "PizzaComQueijo"@pt,
+        skos:prefLabel "Cheesy Pizza"@en,
+        skos:definition "Any pizza that has at least 1 cheese topping."@en
+
+    EquivalentTo:
+        Pizza
+         and (hasTopping some CheeseTopping)
+
+
+Class: QuattroFormaggi
+
+    Annotations:
+        rdfs:label "QuattroFormaggi"@en,
+        skos:prefLabel "Quattro Formaggi"@en,
+        rdfs:label "QuatroQueijos"@pt,
+        skos:altLabel "Quattro Formaggi"@en,
+        skos:altLabel "Quattro Formaggi Pizza"@en
+
+    SubClassOf:
+        hasTopping only
+            ((FourCheesesTopping or TomatoTopping)),
+        hasTopping some TomatoTopping,
+        hasTopping some FourCheesesTopping,
+        NamedPizza
+
+
+Class: LeekTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeLeek"@pt,
+        skos:prefLabel "Leek"@en,
+        rdfs:label "LeekTopping"@en
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: SlicedTomatoTopping
+
+    Annotations:
+        skos:prefLabel "Sliced Tomato"@en,
+        rdfs:label "CoberturaDeTomateFatiado"@pt,
+        rdfs:label "SlicedTomatoTopping"@en
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        TomatoTopping
+
+    DisjointWith:
+        SundriedTomatoTopping
+
+
+Class: PepperTopping
+
+    Annotations:
+        rdfs:label "CoberturaDePimentao"@pt,
+        rdfs:label "PepperTopping"@en,
+        skos:prefLabel "Pepper"@en
+
+    SubClassOf:
+        VegetableTopping
+
+
+Class: TobascoPepperSauce
+
+    Annotations:
+        rdfs:label "TobascoPepperSauceTopping"@en,
+        rdfs:label "MolhoTobascoPepper"@pt,
+        skos:prefLabel "Tobasco Pepper Sauce"@en
+
+    SubClassOf:
+        SauceTopping,
+        hasSpiciness some Hot
+
+
+Class: HerbSpiceTopping
+
+    Annotations:
+        rdfs:label "HerbSpiceTopping"@en,
+        skos:prefLabel "Herb Spice"@en,
+        rdfs:label "CoberturaDeErvas"@pt
+
+    SubClassOf:
+        PizzaTopping
+
+
+Class: VegetarianPizza
+
+    Annotations:
+        skos:definition "Any pizza that does not have fish topping and does not have meat topping is a VegetarianPizza. Note that instances of this class do not need to have any toppings at all."@en,
+        skos:prefLabel "Vegetarian Pizza"@en,
+        rdfs:label "PizzaVegetariana"@pt,
+        rdfs:label "VegetarianPizza"@en
+
+    EquivalentTo:
+        Pizza
+         and (not (hasTopping some FishTopping))
+         and (not (hasTopping some MeatTopping))
+
+    DisjointWith:
+        NonVegetarianPizza
+
+
+Class: Food
+
+    Annotations:
+        rdfs:label "Food"@en,
+        skos:prefLabel "Food"@en
+
+    SubClassOf:
+        DomainConcept
+
+
+Class: PeperonataTopping
+
+    Annotations:
+        rdfs:label "PeperonataTopping"@en,
+        rdfs:label "CoberturaPeperonata"@pt,
+        skos:prefLabel "Peperonata"@en
+
+    SubClassOf:
+        PepperTopping,
+        hasSpiciness some Medium
+
+
+Class: Cajun
+
+    Annotations:
+        skos:altLabel "Cajun Pizza"@en,
+        rdfs:label "Cajun"@en,
+        skos:prefLabel "Cajun"@en,
+        rdfs:label "Cajun"@pt,
+        skos:altLabel "Cajun"@en
+
+    SubClassOf:
+        hasTopping some TomatoTopping,
+        hasTopping some PeperonataTopping,
+        NamedPizza,
+        hasTopping some OnionTopping,
+        hasTopping some PrawnsTopping,
+        hasTopping only
+            ((MozzarellaTopping or OnionTopping or PeperonataTopping or PrawnsTopping or TobascoPepperSauce or TomatoTopping)),
+        hasTopping some TobascoPepperSauce,
+        hasTopping some MozzarellaTopping
+
+
+Class: AsparagusTopping
+
+    Annotations:
+        rdfs:label "AsparagusTopping"@en,
+        skos:prefLabel "Asparagus"@en,
+        rdfs:label "CoberturaDeAspargos"@pt
+
+    SubClassOf:
+        hasSpiciness some Mild,
+        VegetableTopping
+
+
+Class: PrinceCarlo
+
+    Annotations:
+        rdfs:label "PrinceCarlo"@en,
+        rdfs:label "CoberturaPrinceCarlo"@pt,
+        skos:altLabel "Prince Carlo Pizza"@en,
+        skos:prefLabel "Prince Carlo"@en,
+        skos:altLabel "Prince Carlo"@en
+
+    SubClassOf:
+        hasTopping some TomatoTopping,
+        hasTopping some ParmesanTopping,
+        NamedPizza,
+        hasTopping only
+            ((LeekTopping or MozzarellaTopping or ParmesanTopping or RosemaryTopping or TomatoTopping)),
+        hasTopping some LeekTopping,
+        hasTopping some RosemaryTopping,
+        hasTopping some MozzarellaTopping
+
+Class: GorgonzolaTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeGorgonzola"@pt,
+        skos:prefLabel "Gorgonzola"@en,
+        rdfs:label "GorgonzolaTopping"@en
+
+    SubClassOf:
+        CheeseTopping,
+        hasSpiciness some Mild
+
+
+Class: PizzaTopping
+
+    Annotations:
+        rdfs:label "CoberturaDaPizza"@pt,
+        skos:prefLabel "Pizza Topping"@en,
+        rdfs:label "PizzaTopping"@en
+
+    SubClassOf:
+        Food
+
+
+Class: Spiciness
+
+    Annotations:
+        rdfs:label "Tempero"@pt,
+        rdfs:label "Spiciness"@en,
+        rdfs:comment "A ValuePartition that describes only values from Hot, Medium or Mild. NB Subclasses can themselves be divided up into further partitions."@en,
+        skos:prefLabel "Spiciness"@en
+
+    EquivalentTo:
+        (Hot or Medium or Mild)
+
+    SubClassOf:
+        ValuePartition
+
+
+Class: CajunSpiceTopping
+
+    Annotations:
+        rdfs:label "CajunSpiceTopping"@en,
+        rdfs:label "CoberturaDeCajun"@pt,
+        skos:prefLabel "Cajun Spice"@en
+
+    SubClassOf:
+        HerbSpiceTopping,
+        hasSpiciness some Hot
+
+    DisjointWith:
+        RosemaryTopping
+
+
+Class: FishTopping
+
+    Annotations:
+        rdfs:label "CoberturaDePeixe"@pt,
+        rdfs:label "SeafoodTopping"@en,
+        skos:prefLabel "Seafood"@en
+
+    SubClassOf:
+        PizzaTopping,
+        hasSpiciness some Mild
+
+
+Class: GoatsCheeseTopping
+
+    Annotations:
+        rdfs:label "CoberturaDeQueijoDeCabra"@pt,
+        rdfs:label "GoatsCheeseTopping"@en,
+        skos:prefLabel "Goats Cheese"@en
+
+    SubClassOf:
+        CheeseTopping,
+        hasSpiciness some Mild
+
+
+Individual: France
+
+    Types:
+        owl:Thing,
+        Country
+
+
+Individual: Italy
+
+    Types:
+        owl:Thing,
+        Country
+
+
+Individual: England
+
+    Types:
+        owl:Thing,
+        Country
+
+
+Individual: Germany
+
+    Types:
+        owl:Thing,
+        Country
+
+
+Individual: America
+
+    Types:
+        owl:Thing,
+        Country
+
+
+DisjointClasses:
+    GreenPepperTopping,JalapenoPepperTopping,PeperonataTopping,SweetPepperTopping
+
+DisjointClasses:
+    CheeseTopping,FishTopping,FruitTopping,HerbSpiceTopping,MeatTopping,NutTopping,SauceTopping,VegetableTopping
+
+DisjointClasses:
+    IceCream,Pizza,PizzaBase,PizzaTopping
+
+DisjointClasses:
+    ArtichokeTopping,AsparagusTopping,CaperTopping,GarlicTopping,LeekTopping,MushroomTopping,OliveTopping,OnionTopping,PepperTopping,PetitPoisTopping,RocketTopping,SpinachTopping,TomatoTopping
+
+DisjointClasses:
+    American,AmericanHot,Cajun,Capricciosa,Caprina,Fiorentina,FourSeasons,FruttiDiMare,Giardiniera,LaReine,Margherita,Mushroom,Napoletana,Parmense,PolloAdAstra,PrinceCarlo,QuattroFormaggi,Rosa,Siciliana,SloppyGiuseppe,Soho,UnclosedPizza,Veneziana
+
+DisjointClasses:
+    AnchoviesTopping,MixedSeafoodTopping,PrawnsTopping
+
+DisjointClasses:
+    Hot,Medium,Mild
+
+DisjointClasses:
+    ChickenTopping,HamTopping,HotSpicedBeefTopping,PeperoniSausageTopping
+
+DisjointClasses:
+    FourCheesesTopping,GoatsCheeseTopping,GorgonzolaTopping,MozzarellaTopping,ParmesanTopping
+
+DifferentIndividuals:
+    America,England,France,Germany,Italy
+

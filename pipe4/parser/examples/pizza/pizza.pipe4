@@ -1,0 +1,78 @@
+
+Topping enum {
+	MushroomTopping
+	MozzarellaTopping
+	TomatoTopping
+}
+
+
+
+Pizza {
+	Topping Topping[]
+}
+
+NamedPizza Pizza
+
+Review {
+	string
+
+	Created time
+}
+
+MushroomPizza  {
+	NamedPizza {
+		Topping [MushroomTopping, MozzarellaTopping, TomatoTopping]
+	}
+
+	Reviews Review[]
+	RoundFood
+}
+
+
+
+MushroomPizza {
+	HotFood
+}
+
+
+struct Foo {
+	Bar bar;
+	Zet zet;
+}
+
+Country {
+	Italian
+	Russia
+}
+
+Tomato {Vegetable}
+Onion Vegetable // идентично
+
+Vegetable {
+	Country
+}
+
+Spice Vegetable
+Topping {
+	Tomato
+	Onion
+}
+
+Pizza {
+	[]Spice
+	[]Topping
+}
+
+
+FullTomatoPizza Pizza {
+	Spice Tomato
+	Topping Tomato
+}
+
+APizza1 FullTomatoPizza{}
+
+ItalianFullTomatoPizza FullTomatoPizza {
+	Spice Tomato {
+		Country Italian
+	}
+}
