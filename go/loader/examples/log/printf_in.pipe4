@@ -1,0 +1,3 @@
+import "lang/go/log"
+
+log.Printf

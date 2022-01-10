@@ -3,6 +3,7 @@ package ast
 import (
 	"crypto"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -31,6 +32,25 @@ func (i Ident) MarshalJSON() ([]byte, error) {
 func (i *Ident) UnmarshalJSON(value []byte) error {
 	i.Name = strings.Trim(string(value), `"`)
 	return nil
+}
+
+func (i *Ident) String() string {
+	return i.GoImport()
+}
+
+func (i *Ident) GoImport() string {
+	var uri []string
+	if i.Module != nil && i.Module.URI != "" {
+		uri = append(uri, i.Module.URI)
+	}
+	if i.Package != "" {
+		uri = append(uri, i.Package)
+	}
+
+	if i.Module != nil && i.Module.Version.Major > 1 {
+		uri = append(uri, strconv.Itoa(i.Module.Version.Major))
+	}
+	return path.Join(uri...)
 }
 
 type Module struct {
