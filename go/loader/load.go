@@ -6,11 +6,12 @@ import (
 	"log"
 	"strings"
 
+	_go "github.com/pipe4/lang/go"
 	"github.com/pipe4/lang/pipe4/ast"
 	"golang.org/x/tools/go/loader"
 )
 
-func resolve(ident ast.Ident) (*ast.Node, error) {
+func Resolve(ident ast.Ident) (*ast.Node, error) {
 	var conf loader.Config
 	pkg := ident.GoImport()
 	pkg = strings.TrimPrefix(pkg, "lang/go/")
@@ -39,7 +40,7 @@ func GoTypeToPipe4(in types.Type) (ast.Type, error) {
 	out := ast.Type{}
 	switch def := in.(type) {
 	case *types.Signature:
-		out.Ident = ast.Ident{Name: "go.func"}
+		out.Ident = _go.Func
 		params := def.Params()
 		for i := 0; i < params.Len(); i++ {
 			param := params.At(i)

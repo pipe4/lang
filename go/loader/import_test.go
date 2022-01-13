@@ -8,7 +8,7 @@ import (
 )
 
 func TestImport(t *testing.T) {
-	ret, err := resolve(ast.Ident{Name: "Printf", Package: "lang/go/log"})
+	ret, err := Resolve(ast.Ident{Name: "Printf", Package: "lang/go/log"})
 	require.NoError(t, err)
 	yamlString, err := ast.NodeList{*ret}.ToYaml()
 	require.NoError(t, err)

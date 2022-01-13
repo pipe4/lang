@@ -8,10 +8,10 @@ import (
 )
 
 type Ident struct {
-	// Name of node relative to scope, for example: Name
+	// Name of node relative to scope, for example: Ident.Name
 	Name string
-	// Scope of node relative to package, for example Ident
-	Scope string
+	// // Scope of node relative to package, for example Ident
+	// Scope string
 	// Filename relative to package directory, for example: ident.go
 	Filename string
 	// Package path relative to module, for example: pipe4/ast
@@ -53,6 +53,44 @@ func (i *Ident) GoImport() string {
 	return path.Join(uri...)
 }
 
+func (i Ident) WithModule(uri string) Ident {
+	i.Module = &Module{URI: uri}
+	return i
+}
+func (i Ident) WithPackage(Package string) Ident {
+	i.Package = Package
+	return i
+}
+
+func (i Ident) Match(with Ident) bool {
+	return i.GetURI() == with.GetURI()
+}
+
+func (i Ident) GetImportURI() string {
+	if i.ImportURI != "" {
+		return i.ImportURI
+	}
+	uri := ""
+	if i.Module != nil {
+		uri = i.Module.URI
+	}
+	if i.Module != nil && i.Module.Version.Major > 1 {
+		uri += "/" + strconv.Itoa(i.Module.Version.Major)
+	}
+	if i.Package != "" {
+		uri += "/" + i.Package
+	}
+	return uri
+}
+
+func (i Ident) GetURI() string {
+	uri := i.GetImportURI()
+	if i.Name != "" {
+		uri += "." + i.Name
+	}
+	return uri
+}
+
 type Module struct {
 	// URI that exactly identify module, for example: github.com/pipe4/lang
 	URI     string
@@ -81,4 +119,8 @@ func (i *Ident) Normalize() {
 			_, i.Name = path.Split(namePath)
 		}
 	}
+}
+
+func NewIdent(module string, Package string, name string) Ident {
+	return Ident{Name: name}.WithModule(module).WithPackage(Package)
 }
