@@ -1,14 +1,18 @@
 package loader
 
 import (
-	"fmt"
 	"go/types"
 	"log"
 	"strings"
 
 	_go "github.com/pipe4/lang/go"
 	"github.com/pipe4/lang/pipe4/ast"
+	"github.com/pkg/errors"
 	"golang.org/x/tools/go/loader"
+)
+
+var (
+	Unimplemented = errors.Errorf("unimplemented")
 )
 
 func Resolve(ident ast.Ident) (*ast.Node, error) {
@@ -20,7 +24,7 @@ func Resolve(ident ast.Ident) (*ast.Node, error) {
 	prog, err := conf.Load()
 	log.Println(prog)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load go import for %v: %w", ident, err)
+		return nil, errors.Wrapf(err, "failed to load go import for %+v", ident)
 	}
 	scope := prog.Package(pkg).Pkg.Scope()
 	nodeObj := scope.Lookup(ident.Name)
@@ -30,7 +34,7 @@ func Resolve(ident ast.Ident) (*ast.Node, error) {
 	}
 	nodeType, err := GoTypeToPipe4(nodeObj.Type())
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert type for %v: %w", ident, err)
+		return nil, errors.Wrapf(err, "failed to convert type for %v", ident)
 	}
 	node.Type = nodeType
 	return &node, nil
@@ -47,7 +51,7 @@ func GoTypeToPipe4(in types.Type) (ast.Type, error) {
 
 			paramType, err := GoTypeToPipe4(param.Type())
 			if err != nil {
-				return out, fmt.Errorf("failed to convert %v func parameter: %w", i, err)
+				return out, errors.Wrapf(err, "failed to convert %v func parameter", i)
 			}
 			out.Args = append(out.Args, ast.Node{
 				Ident: ast.Ident{Name: param.Name()},
@@ -66,12 +70,12 @@ func GoTypeToPipe4(in types.Type) (ast.Type, error) {
 		out.Ident = ast.Ident{Name: "array"}
 		elemType, err := GoTypeToPipe4(def.Elem())
 		if err != nil {
-			return out, fmt.Errorf("failed to convert slice type: %w", err)
+			return out, errors.Wrapf(err, "failed to convert slice type")
 		}
 		out.Args = []ast.Node{{Type: elemType}}
 		return out, nil
 	default:
-		return out, fmt.Errorf("unimplemented type: %v", def.String())
+		return out, errors.Wrapf(Unimplemented, "%v", def.String())
 	}
 	return out, nil
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,6 +9,7 @@ import (
 	"github.com/pipe4/lang/go/generator"
 	"github.com/pipe4/lang/pipe4/ast"
 	"github.com/pipe4/lang/pipe4/parser"
+	"github.com/pkg/errors"
 	"github.com/urfave/cli/v2"
 )
 
@@ -35,11 +35,11 @@ func run(context *cli.Context) error {
 
 	root, err := os.MkdirTemp(os.TempDir(), "pipe4_")
 	if err != nil {
-		return fmt.Errorf("failed create codegen dir: %w", err)
+		return errors.Wrapf(err, "failed create codegen dir")
 	}
 	path, err := generator.GenerateMain(ast.NewIdent(module, "", "main"), nodeList, root)
 	if err != nil {
-		return fmt.Errorf("failed generate main package: %w", err)
+		return errors.Wrapf(err, "failed generate main package")
 	}
 	log.Println(path)
 

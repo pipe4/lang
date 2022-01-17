@@ -19,7 +19,10 @@ func GenerateMain(ident ast.Ident, items ast.NodeList, root string) (string, err
 		},
 		true,
 		func() error {
-			for _, item := range items {
+			for i, item := range items {
+				if i == 0 {
+					continue
+				}
 				subCtx := Context{
 					root:    ctx.root,
 					graph:   item,

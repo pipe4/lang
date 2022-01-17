@@ -6,6 +6,8 @@ import (
 	"path"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/gobeam/stringy"
 	_go "github.com/pipe4/lang/go"
 	"github.com/pipe4/lang/go/loader"
@@ -32,16 +34,17 @@ func (c *Context) Generate() error {
 	if c.graph.Type.Ident != (ast.Ident{}) {
 		typeNode, err := loader.Resolve(c.graph.Type.Ident)
 		if err != nil {
-			return fmt.Errorf("failed to generate %v: %w", c.graph.Ident.GetURI(), err)
+			return errors.Wrapf(err, "failed to generate %v", c.graph.Ident.GetURI())
 		}
 		if typeNode.Ident.Match(_go.Func) {
 			if err := c.generateFuncInvoke(typeNode.Type); err != nil {
-				return fmt.Errorf("failed generate func invokation: %w", err)
+				return errors.Wrapf(err, "failed generate func invokation")
 			}
 		}
+		return nil
 	}
 
-	return fmt.Errorf("failed to generate: %w", resolver.Unimplemented)
+	return errors.Wrapf(resolver.Unimplemented, "failed to generate: %+v", c.graph)
 }
 
 func (c *Context) generateFuncInvoke(typeNode ast.Type) error {
@@ -51,7 +54,7 @@ func (c *Context) generateFuncInvoke(typeNode ast.Type) error {
 	for i, arg := range c.graph.Type.Args {
 		// if len(typeNode.Args)
 		if err := c.generateGoExpression(arg.Type, typeNode); err != nil {
-			return fmt.Errorf("failed write %v invoke argument: %w", i, err)
+			return errors.Wrapf(err, "failed write %v invoke argument", i)
 		}
 	}
 	c.write(")", "\n")
@@ -63,7 +66,7 @@ func (c *Context) generateGoExpression(value ast.Type, goType ast.Type) error {
 	case ast.BodyString:
 		c.write(`"`, value.String, `"`)
 	default:
-		return fmt.Errorf("%w: %+v to %+v", resolver.Unimplemented, value, goType)
+		return errors.Wrapf(resolver.Unimplemented, "%+v to %+v", value, goType)
 	}
 	return nil
 }
@@ -99,7 +102,7 @@ func (c *Context) generateFile(typeNode ast.Node, isMain bool, bodyGenerator fun
 
 	for _, item := range c.body {
 		if _, err := file.WriteString(item); err != nil {
-			return "", fmt.Errorf("failed write to file %v: %w", filePath, err)
+			return "", errors.Wrapf(err, "failed write to file %v", filePath)
 		}
 	}
 	return filePath, nil
@@ -116,7 +119,7 @@ func (c *Context) generateFunc(typeNode ast.Node, bodyGenerator func() error) er
 
 	c.write(fmt.Sprintf("func %s(%s) %s {\n", funcName, args, retTypes))
 	if err := bodyGenerator(); err != nil {
-		return fmt.Errorf("failed to generate body for %v %v: %w", c.graph.Ident.GetURI(), funcName, err)
+		return errors.Wrapf(err, "failed to generate body for %v %v", c.graph.Ident.GetURI(), funcName)
 	}
 	c.write("}\n\n")
 	return nil
@@ -129,7 +132,7 @@ func (c *Context) getFile(ident ast.Ident, isMain bool) (*os.File, string, error
 	}
 	dirName := path.Join(c.root, cmd, ident.GetImportURI())
 	if err := os.MkdirAll(dirName, os.FileMode(0700)); err != nil {
-		return nil, "", fmt.Errorf("failed create dir %v: %w", dirName, err)
+		return nil, "", errors.Wrapf(err, "failed create dir %v", dirName)
 	}
 
 	name := stringy.New(ident.Name)
@@ -138,7 +141,7 @@ func (c *Context) getFile(ident ast.Ident, isMain bool) (*os.File, string, error
 	fileName := path.Join(dirName, name.SnakeCase("?", "").ToLower()+".go")
 	file, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.FileMode(0600))
 	if err != nil {
-		return nil, "", fmt.Errorf("failed create file %v: %w", fileName, err)
+		return nil, "", errors.Wrapf(err, "failed create file %v", fileName)
 	}
 	return file, fileName, nil
 }

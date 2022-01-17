@@ -1,16 +1,16 @@
 package resolver
 
 import (
-	"errors"
-	"fmt"
+	errs "errors"
 	"strings"
 
 	"github.com/pipe4/lang/go/loader"
 	"github.com/pipe4/lang/pipe4/ast"
+	"github.com/pkg/errors"
 )
 
 var (
-	Unimplemented = errors.New("unimplemented")
+	Unimplemented = errs.New("unimplemented")
 )
 
 type Resolver struct {
@@ -34,5 +34,5 @@ func (r *Resolver) Resolve(ident ast.Ident) (*ast.Node, error) {
 		}
 		r.cache[ident.GetURI()] = *node
 	}
-	return nil, fmt.Errorf("%w: %v", Unimplemented, ident.GetURI())
+	return nil, errors.Wrapf(Unimplemented, "%v", ident.GetURI())
 }
