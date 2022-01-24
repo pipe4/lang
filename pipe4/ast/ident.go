@@ -1,37 +1,42 @@
 package ast
 
 import (
-	"crypto"
 	"path"
 	"strconv"
 	"strings"
 )
 
-type Ident struct {
-	// Name of node relative to scope, for example: Ident.Name
-	Name string
-	// // Scope of node relative to package, for example Ident
-	// Scope string
-	// Filename relative to package directory, for example: ident.go
-	Filename string
-	// Package path relative to module, for example: pipe4/ast
-	Package string
-	// Module
-	Module *Module
-	// ImportURI
-	ImportURI string
+// Ident like "github.com/pipe4/lang/v1/pipe4/ast.Ident.URI"
+type Ident string
+
+func (i Ident) Name() string {
+	names := strings.Split(i.FullName(), ".")
+	return names[len(names)-1]
+}
+
+func (i Ident) BaseName() string {
+	return strings.Split(i.FullName(), ".")[0]
+}
+
+func (i Ident) Rebase(base Ident) Ident {
+	subName := strings.Join(strings.Split(i.FullName(), ".")[1:], ".")
+	return Ident(string(base) + "." + subName)
+}
+
+func (i Ident) IsComplete() bool {
+	return strings.ContainsRune(string(i), '/')
+}
+
+func (i Ident) FullName() string {
+	paths := strings.Split(string(i), "/")
+	return paths[len(paths)-1]
 }
 
 func (i Ident) MarshalJSON() ([]byte, error) {
-	if i.Name == "" {
-		return []byte(`""`), nil
-	}
-	return []byte(`"` + i.Name + `"`), nil
+	return []byte(`"` + i.URI + `"`), nil
 }
-
 func (i *Ident) UnmarshalJSON(value []byte) error {
-	i.Name = strings.Trim(string(value), `"`)
-	return nil
+	i.URI = strings.Trim(string(value), `"`)
 }
 
 func (i *Ident) String() string {
@@ -91,23 +96,23 @@ func (i Ident) GetURI() string {
 	return uri
 }
 
-type Module struct {
-	// URI that exactly identify module, for example: github.com/pipe4/lang
-	URI     string
-	Version Version
-}
+// type Module struct {
+// 	// URI that exactly identify module, for example: github.com/pipe4/lang
+// 	// URI     string
+// 	// Version Version
+// }
 
-type Version struct {
-	Major int
-	Minor int
-	Patch int
-
-	Ref  string
-	Tags []string
-
-	Hash crypto.Hash
-	Sum  string
-}
+// type Version struct {
+// 	Major int
+// 	Minor int
+// 	Patch int
+//
+// 	Ref  string
+// 	Tags []string
+//
+// 	Hash crypto.Hash
+// 	Sum  string
+// }
 
 func (i *Ident) Normalize() {
 	if i.Name == "" {

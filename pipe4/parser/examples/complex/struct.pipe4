@@ -16,7 +16,9 @@ HashMap (
 ) {
 	typedMap Map(K, V)
 
-	anyGoMap go-std.Map{}
+	anyGoMap go-std.Map {
+		asd "123"
+	}
 
 	return typedMap(anyGoMap)
 }
