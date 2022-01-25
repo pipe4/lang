@@ -4,3 +4,22 @@ Person {
 	LastName string
 	Age int
 }
+
+
+Num {}
+Int Num
+Float Num
+Rad Num
+
+IRad Rad {
+	Num Int
+}
+FRad Rad {
+	Num Float
+}
+
+r IR {
+	IRad 10
+}
+
+
