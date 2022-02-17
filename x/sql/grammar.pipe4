@@ -1,0 +1,54 @@
+import "grammar"
+
+grammar.ebnf ebnf {
+	sql = select | insert | update | delete ;
+
+	delete = "DELETE" "FROM" table-references where? ;
+	insert = "INSERT" "INTO" table-expression (select | ("(" insert-fields ")")? "VALUES" "(" insert-values ")") ;
+	update = "UPDATE" table-references set where? ;
+
+	insert-fields = field-name ("," insert-fields)? ;
+	insert-values = expression ("," insert-values)? ;
+	select = unions-select (("MINUS" | "UNION") select)? ;
+	set = "SET" set-expressions ;
+
+	set-expressions = set-expression ("," set-expressions)? ;
+	unions-select = intersect-select ("INTERSECT" unions-select)? ;
+
+	intersect-select = "SELECT" selected-references "FROM" table-references where? (having | group-by | order-by)* | "(" select ")" ;
+	set-expression = field-expression "=" expression ;
+
+	group-by = "GROUP" "BY" group-by-expressions ;
+	having = "HAVING" condition ;
+	order-by = "ORDER" "BY" order-by-expressions ;
+	selected-references = selected-reference ("," selected-references)? ;
+	table-references = table-reference ("," table-references)? ;
+	where = "WHERE" condition ;
+
+	condition = ors-condition ("OR" condition)? ;
+	group-by-expressions = field-expression ("," group-by-expressions)? ;
+	order-by-expressions = order-by-expression ("," order-by-expressions)? ;
+	selected-reference = expression ("AS"? alias-name)? ;
+	table-reference = (select | table-name) ("AS"? alias-name)? ;
+
+	alias-name = <IDENTIFIER> ;
+	order-by-expression = expression ("ASC" | "DESC")? ("NULLS" ("FIRST" | "LAST"))? ;
+	ors-condition = ands-condition ("AND" ors-condition)? ;
+
+	ands-condition = "NOT"? simple-condition ;
+
+	simple-condition = expression condition-operator expression ;
+
+	condition-operator = "=" | "!=" | "<" | ">" | "<=" | ">=" | "IN" ;
+	expressions = expression ("," expressions)? ;
+	expression = constant | field-expression | "(" (expressions | select) ")" ;
+
+	constant = <INTEGER_LITERAL> | <FLOATING_POINT_LITERAL> | <STRING_LITERAL> ;
+	field-expression = (table-expression ".")? field-name ;
+
+	field-name = <IDENTIFIER> ;
+	table-expression = (schema-name ".")? table-name ;
+
+	schema-name = <IDENTIFIER> ;
+	table-name = <IDENTIFIER> ;
+}
