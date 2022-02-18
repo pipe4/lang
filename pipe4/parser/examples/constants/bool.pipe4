@@ -1,11 +1,77 @@
+import "geom"
+
+
+Italy Country
+
+
+Pizza Food {
+	[]Topping
+}
+
+
+OnionTopping pattern Topping Onion
+
+
+Name string
+NamedPizza pattern Pizza {
+	Name
+}
+
+Radius int
+
+r Radius 10
+
+
+Topping Food
+MozzarellaTopping Topping Mozzarella
+
+MozzarellaTopping Topping Mozzarella {
+	Spiciness Mild
+	CountryOfOrigin Italy
+}
+
+MozzarellaPizza Pizza {
+	MozzarellaTopping
+}
+
+
+NotVegetarianPizza pattern Pizza {
+	Topping or [Meat, Fish]
+}
+
+InterestingPizza pattern Pizza min(3) {[]Topping}
+
+pizza NotVegetarianPizza American
+
+type Pizza interface {
+	geom.Radius
+}
+
+
+type Pizza interface {
+	geom.Radius
+}
+
+
+JsonPizza ToJson Pizza
+
+
+JsonPizza ToJson(typeSnakeCase true) Pizza
+
+
+JsonPizza {
+	geom_Pizza int
+}
 
 
 bob true
 not false
 
+
 Person {
 	Missing = true
 }
+
 
 /*/lang:yaml test:ast/
 Statements:
