@@ -1,0 +1,45 @@
+
+keywords (
+	define
+	switch
+	oneof
+	if
+	join
+)
+
+define (
+	pizzeria
+	pizza
+	size
+	name
+	string
+	topping
+	radius
+	small
+	medium
+	big
+	numeric
+
+
+	unit
+	centimetre
+
+	numeric.unit.cm equal centimetre
+
+	chickenFillet
+	mozzarella
+	greenPepper
+	sauce
+	garlic
+	tomato
+
+	dough
+
+	traditional
+	thin
+
+	person
+	number
+	price
+	base
+)

@@ -1,0 +1,95 @@
+// описание в контексте пиццерии папа джонс
+join PapaJohns
+
+pizza {
+	size = 23cm
+	name string
+	// один ко многим
+	[]topping
+
+	dough = traditional
+
+	person.number
+
+	price
+
+	crust oneof {sausage,cheese,regular} = regular
+
+	GarlicCheeseCrust // = false
+}
+
+pizza.size radius oneof {
+	// маленькая пицца доступна только если тесто толстое
+	23cm if dough traditional
+	30cm
+	35cm
+	40cm
+}
+
+// чесночно сырная корочка
+define GarlicCheeseCrust bool
+
+
+// дефолтные единицы измерения
+pizza.size.unit = cm
+pizza.price.unit = rub
+
+pizza.dough oneof {
+	traditional
+	thin
+}
+
+pizza.topping oneof {
+	chickenFillet
+	mozzarella
+	greenPeppers
+	garlic
+	tomato
+
+	sauce
+}
+
+// не больше 10 ингридиентов
+pizza.topping.size <= 10
+
+pizza.person.number [
+	1 if size < 35cm
+	2 if 23cm < size < 40cm
+	3 if size 35cm
+]
+
+// зависимость базовой цены пиццы от размера
+pizza.price.base switch size {
+	case 23cm: 399rub
+	case 30cm: 549rub
+	case 35cm: 719rub
+	case 40cm: 919rub
+}
+
+sauce oneof {
+	GarlicRanch
+}
+
+define GarlicRanch sauce
+
+define ChickenGreen pizza {
+	name "Chicken Green"
+
+	// дефолтная начинка (можно добавить и выкинуть)
+	topping = [
+		chickenFillet
+		mozzarella
+		greenPepper
+
+		GarlicRanch
+		garlic
+		tomato
+	]
+}
+
+// все пиццы у которых есть имя и топпинг именные пиццы
+define NamedPizza match pizza {
+	name !empty
+	topping !empty
+}
+
