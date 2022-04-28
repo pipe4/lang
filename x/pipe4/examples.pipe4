@@ -1,0 +1,42 @@
+
+type Pizza {
+	[]Topping
+}
+
+type Pizza::Order {
+	Time
+}
+
+type ReadyPizza {
+	Pizza
+	Made Time
+}
+
+unit OrderMakerUI () Pizza::Order {
+
+}
+
+unit Pizzeria (order Pizza::Order) ReadyPizza {
+
+}
+
+
+unit DurationLogger (
+	From time
+	To time
+) {
+
+}
+
+
+pipeline {
+	OrderMakerUI -> Pizzeria
+
+	OrderMakerUI -> DurationLogger {
+		Time -> From
+	}
+	Pizzeria -> DurationLogger {
+		Made -> To
+	}
+}
+

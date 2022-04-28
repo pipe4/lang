@@ -1,0 +1,73 @@
+
+
+type (
+	Ident
+	Eol
+	String
+	Number
+	Bool
+	Comment
+	Dot
+	Comma
+	Statement
+	Space
+	Definition
+	Expression
+	MultilineExpression
+	SubLang
+	ConstLiteral
+
+	Block
+	Struct // {}
+	Array // []
+	Args // ()
+)
+
+
+ebnf ConstLiteral {
+	Bool
+	String
+	Number
+}
+
+ebnf Pipe4 {
+	Statement*
+}
+/* -->
+	type Pipe4 {
+		grammar.Ebnf {
+			Any Statement
+		}
+	}
+*/
+
+
+
+ebnf Statement {
+	Definition|Comment
+}
+
+ebnf Definition {
+	Ident (Expression)
+}
+
+ebnf Block {
+	Struct|Array|Args
+}
+
+ebnf Struct {
+	"{" (Expression*|Eol Statement* Eol) "}"
+}
+ebnf Array {
+	"[" (Expression*|Eol Statement* Eol) "]"
+}
+ebnf Args {
+	"(" (Expression*|Eol Statement* Eol) ")"
+}
+
+ebnf Expression {
+	Ident|ConstLiteral|Struct|Array|Args|SubLang
+}
+
+
+

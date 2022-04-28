@@ -1,0 +1,39 @@
+
+import "pipe4"
+
+type Ebnf {
+	pipe4.Grammar
+}
+
+
+type Expr {
+	Concat|OneOf|Group|Optional|Any|Definition|Terminal
+}
+
+type String {
+	body string
+}
+type Regex {
+	body string
+}
+
+type Terminal {
+	String|Regex
+}
+
+type Concat Expr[] // A B
+type OneOf Expr[]  // (A|B)
+// type FirstOf Expr[]
+type Group Expr[] // (A B)
+
+type Optional Expr // [A]
+type Any Expr[] // {A}
+
+type Ident {
+	body string
+}
+
+type Definition {
+	Ident
+	Expr
+}
