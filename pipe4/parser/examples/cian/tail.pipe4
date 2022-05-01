@@ -1,0 +1,22 @@
+
+
+
+define LastIdEndpoint {
+    url "https://api.cian.ru/search-offers/v2/search-offers-desktop"
+    method post
+    request.body json = {
+    	jsonQuery {
+			_type flatsale
+			engine_version {type term, value 2}
+			page {type term, value 1}
+			sort {type term, value creation_date_desc}
+        }
+    }
+
+	id number response.json.data.offersSerialized[0].cianId
+}
+
+
+unit RequestLastId() {
+	http.Fetch(LastIdEndpoint{})
+}
